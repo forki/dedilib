@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A7535031-D4D3-4DF8-A797-2B639639CF0D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DediLib</RootNamespace>
+    <AssemblyName>DediLib</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <BaseOutputPath>..\..\..\bin\$(AssemblyName)</BaseOutputPath>
+    <OutputPath>$(BaseOutputPath)\$(Configuration)\</OutputPath>
+    <BaseIntermediateOutputPath>..\..\..\obj\$(AssemblyName)</BaseIntermediateOutputPath>
+    <IntermediateOutputPath>$(BaseIntermediateOutputPath)\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <BaseOutputPath>..\..\..\bin\$(AssemblyName)</BaseOutputPath>
+    <OutputPath>$(BaseOutputPath)\$(Configuration)\</OutputPath>
+    <BaseIntermediateOutputPath>..\..\..\obj\$(AssemblyName)</BaseIntermediateOutputPath>
+    <IntermediateOutputPath>$(BaseIntermediateOutputPath)\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\SolutionInfo.cs">
+      <Link>Properties\SolutionInfo.cs</Link>
+    </Compile>
+    <Compile Include="ClientPool.cs" />
+    <Compile Include="Collections\CascadedDictionary.cs" />
+    <Compile Include="Collections\ITimedDictionary.cs" />
+    <Compile Include="Collections\TimedDictionary.cs" />
+    <Compile Include="Collections\TimedDictionaryWorker.cs" />
+    <Compile Include="Collections\TimedValue.cs" />
+    <Compile Include="CounterSignal.cs" />
+    <Compile Include="Data\QueryResultCompiler.cs" />
+    <Compile Include="Data\SqlBuilder.cs" />
+    <Compile Include="DefaultTimeSource.cs" />
+    <Compile Include="IO\ExecutableRunner.cs" />
+    <Compile Include="IO\FileNameCleaner.cs" />
+    <Compile Include="IInjectionContext.cs" />
+    <Compile Include="Imaging\FastImageArgb.cs" />
+    <Compile Include="Imaging\ImageTools.cs" />
+    <Compile Include="InjectionContext.cs" />
+    <Compile Include="InterlockedBoolean.cs" />
+    <Compile Include="IO\StreamTransferrer.cs" />
+    <Compile Include="ITimeSource.cs" />
+    <Compile Include="Logging\ConsoleLogger.cs" />
+    <Compile Include="Logging\ILogger.cs" />
+    <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Logging\LoggingTextWriter.cs" />
+    <Compile Include="Logging\LogLevel.cs" />
+    <Compile Include="Logging\MultipleLogger.cs" />
+    <Compile Include="Logging\NLogLogger.cs" />
+    <Compile Include="Logging\NLogLooseBinding.cs" />
+    <Compile Include="Logging\NullLogger.cs" />
+    <Compile Include="NameOf.cs" />
+    <Compile Include="PlatformHelpers.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyCopier.cs" />
+    <Compile Include="RoundRobin.cs" />
+    <Compile Include="Singleton.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

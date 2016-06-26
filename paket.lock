@@ -1,0 +1,7 @@
+NUGET
+  remote: http://api.nuget.org/v3/index.json
+    FAKE (4.28)
+    NLog (4.3.5)
+    NSubstitute (1.10)
+    NUnit (2.6.4)
+    NUnit.Runners (2.6.4)

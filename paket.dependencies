@@ -1,0 +1,7 @@
+source https://api.nuget.org/v3/index.json
+
+nuget FAKE
+nuget NLog
+nuget NSubstitute
+nuget NUnit ~> 2.6.4
+nuget NUnit.Runners ~> 2.6.4
