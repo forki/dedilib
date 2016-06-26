@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>DediLib</id>
+    <version>$version$</version>
+    <authors>Hans Wolff</authors>
+    <owners>Hans Wolff</owners>
+    <licenseUrl>https://raw.githubusercontent.com/hanswolff/dedilib/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/hanswolff/dedilib</projectUrl>
+    <!-- <iconUrl></iconUrl> -->
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>dedimax library</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2016 (c) dedimax solutions</copyright>
+    <tags></tags>
+    <dependencies>
+    </dependencies>
+	<frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.Net" targetFramework="net40" />
+    </frameworkAssemblies>
+  </metadata>
+  <files>
+    <file src="build\*.dll" target="lib/net40" />
+  </files>  
+</package>

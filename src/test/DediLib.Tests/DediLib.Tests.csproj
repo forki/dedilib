@@ -50,11 +50,13 @@
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="Collections\TestTimedDictionary.cs" />
+    <Compile Include="Configuration\TestConnectionStringBuilder.cs" />
     <Compile Include="Data\TestSqlBuilder.cs" />
     <Compile Include="IO\TestExecutableRunner.cs" />
     <Compile Include="IO\TestFileNameCleaner.cs" />
     <Compile Include="IO\TestStreamTransferrer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="IO\TestStreamSplitter.cs" />
     <Compile Include="TestClientPool.cs" />
     <Compile Include="TestCounterSignal.cs" />
     <Compile Include="TestInjectionContext.cs" />
@@ -184,4 +186,8 @@
       <Paket>True</Paket>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="paket.references" />
+  </ItemGroup>
+  <ItemGroup />
 </Project>

@@ -21,7 +21,7 @@ Target "BuildApp" (fun _ ->
 
 Target "BuildTest" (fun _ ->
     !! "src/test/**/*.csproj"
-      |> MSBuildDebug testDir "Build"
+      |> MSBuildRelease testDir "Build"
       |> Log "TestBuild-Output: "
 )
 

@@ -38,6 +38,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
@@ -56,13 +57,15 @@
     <Compile Include="Collections\TimedDictionary.cs" />
     <Compile Include="Collections\TimedDictionaryWorker.cs" />
     <Compile Include="Collections\TimedValue.cs" />
+    <Compile Include="Configuration\ConnectionStringBuilder.cs" />
+    <Compile Include="Configuration\CustomConfigurationReader.cs" />
+    <Compile Include="Configuration\LoadConfigHelpers.cs" />
     <Compile Include="CounterSignal.cs" />
     <Compile Include="Data\QueryResultCompiler.cs" />
     <Compile Include="Data\SqlBuilder.cs" />
     <Compile Include="DefaultTimeSource.cs" />
     <Compile Include="IO\ExecutableRunner.cs" />
     <Compile Include="IO\FileNameCleaner.cs" />
-    <Compile Include="IInjectionContext.cs" />
     <Compile Include="Imaging\FastImageArgb.cs" />
     <Compile Include="Imaging\ImageTools.cs" />
     <Compile Include="InjectionContext.cs" />
@@ -84,6 +87,8 @@
     <Compile Include="PropertyCopier.cs" />
     <Compile Include="RoundRobin.cs" />
     <Compile Include="Singleton.cs" />
+    <Compile Include="IO\IKnowTotalBytesWritten.cs" />
+    <Compile Include="IO\StreamSplitter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
