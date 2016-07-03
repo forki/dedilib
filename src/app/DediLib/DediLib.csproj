@@ -53,10 +53,13 @@
     </Compile>
     <Compile Include="ClientPool.cs" />
     <Compile Include="Collections\CascadedDictionary.cs" />
+    <Compile Include="Collections\HashSetExtensions.cs" />
     <Compile Include="Collections\ITimedDictionary.cs" />
+    <Compile Include="Collections\NoDuplicateList.cs" />
     <Compile Include="Collections\TimedDictionary.cs" />
     <Compile Include="Collections\TimedDictionaryWorker.cs" />
     <Compile Include="Collections\TimedValue.cs" />
+    <Compile Include="Collections\TwoWayDictionary.cs" />
     <Compile Include="Configuration\ConnectionStringBuilder.cs" />
     <Compile Include="Configuration\CustomConfigurationReader.cs" />
     <Compile Include="Configuration\LoadConfigHelpers.cs" />
@@ -85,6 +88,7 @@
     <Compile Include="PlatformHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyCopier.cs" />
+    <Compile Include="RemainingTimer.cs" />
     <Compile Include="RoundRobin.cs" />
     <Compile Include="Singleton.cs" />
     <Compile Include="IO\IKnowTotalBytesWritten.cs" />

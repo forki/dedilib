@@ -360,5 +360,4 @@ namespace DediLib.Tests.Collections
             }
         }
     }
-    // ReSharper restore InconsistentNaming
 }
