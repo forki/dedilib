@@ -7,6 +7,8 @@ namespace DediLib.Logging
     {
         private readonly ILogger[] _loggers;
 
+        public string Name { get; }
+
         public ITimeSource TimeSource
         {
             get { return _loggers[0].TimeSource; }
@@ -22,14 +24,20 @@ namespace DediLib.Logging
 
         public MultipleLogger(ILogger logger, params ILogger[] loggers)
         {
-            if (logger == null) throw new ArgumentNullException("logger");
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
             _loggers = (new[] { logger }.Union(loggers ?? new ILogger[0]).Where(x => x != null)).ToArray();
         }
 
         public MultipleLogger(ITimeSource timeSource, ILogger logger, params ILogger[] loggers)
+            : this(null, timeSource, logger, loggers)
+        {
+        }
+
+        public MultipleLogger(string name, ITimeSource timeSource, ILogger logger, params ILogger[] loggers)
             : this(logger, loggers)
         {
-            if (timeSource == null) throw new ArgumentNullException("timeSource");
+            if (timeSource == null) throw new ArgumentNullException(nameof(timeSource));
+            Name = name;
             TimeSource = timeSource;
         }
 

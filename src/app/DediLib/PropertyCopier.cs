@@ -116,34 +116,22 @@ namespace DediLib
         /// source type. This is a single delegate from an expression tree.
         /// </summary>
         private static Func<TSource, TTarget> _creatorFull = s => { _creatorFull = BuildCreator(true); return _creatorFull(s); };
-        internal static Func<TSource, TTarget> CreatorFull
-        {
-            get { return _creatorFull; }
-        }
+        internal static Func<TSource, TTarget> CreatorFull => _creatorFull;
 
         private static Func<TSource, TTarget> _creatorMatching = s => { _creatorMatching = BuildCreator(false); return _creatorMatching(s); };
-        internal static Func<TSource, TTarget> CreatorMatching
-        {
-            get { return _creatorMatching; }
-        }
+        internal static Func<TSource, TTarget> CreatorMatching => _creatorMatching;
 
         private static Action<TSource, TTarget> _mapperFull = (s, t) => { _mapperFull = BuildMapper(true); _mapperFull(s, t); };
-        internal static Action<TSource, TTarget> MapperFull
-        {
-            get { return _mapperFull; }
-        }
+        internal static Action<TSource, TTarget> MapperFull => _mapperFull;
 
         private static Action<TSource, TTarget> _mapperMatching = (s, t) => { _mapperMatching = BuildMapper(false); _mapperMatching(s, t); };
-        internal static Action<TSource, TTarget> MapperMatching
-        {
-            get { return _mapperMatching; }
-        }
+        internal static Action<TSource, TTarget> MapperMatching => _mapperMatching;
         // ReSharper restore FieldCanBeMadeReadOnly.Local
 
         internal static TTarget CopyFull(TSource source)
         {
             if (ReferenceEquals(source, null))
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return CreatorFull(source);
         }
@@ -151,7 +139,7 @@ namespace DediLib
         internal static TTarget CopyMatching(TSource source)
         {
             if (ReferenceEquals(source, null))
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return CreatorMatching(source);
         }
@@ -159,7 +147,7 @@ namespace DediLib
         internal static void CopyFull(TSource source, TTarget target)
         {
             if (ReferenceEquals(source, null))
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             MapperFull(source, target);
         }
@@ -167,7 +155,7 @@ namespace DediLib
         internal static void CopyMatching(TSource source, TTarget target)
         {
             if (ReferenceEquals(source, null))
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             MapperMatching(source, target);
         }

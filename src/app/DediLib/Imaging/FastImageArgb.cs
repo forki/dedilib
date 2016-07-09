@@ -23,28 +23,19 @@ namespace DediLib.Imaging
         /// <summary>
         /// Image buffer
         /// </summary>
-        public int[] Buffer
-        {
-            get { return _buffer; }
-        }
+        public int[] Buffer => _buffer;
 
         private int _height;
         /// <summary>
         /// Gets the image height
         /// </summary>
-        public int Height
-        {
-            get { return _height; }
-        }
+        public int Height => _height;
 
         private int _width;
         /// <summary>
         /// Gets the image width
         /// </summary>
-        public int Width
-        {
-            get { return _width; }
-        }
+        public int Width => _width;
 
         /// <summary>
         /// Constructor
@@ -92,7 +83,7 @@ namespace DediLib.Imaging
         /// <returns>ARGB image</returns>
         public FastImageArgb(Bitmap bitmap)
         {
-            if (bitmap == null) throw new ArgumentNullException("bitmap");
+            if (bitmap == null) throw new ArgumentNullException(nameof(bitmap));
             _height = bitmap.Height;
             _width = bitmap.Width;
             _buffer = new int[_width * _height];

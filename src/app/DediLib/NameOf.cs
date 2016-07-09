@@ -26,12 +26,12 @@ namespace DediLib
             // get MemberExpression from the lambda expression
             var expr = propertyAccessExpression.Body as MemberExpression;
             if (expr == null)
-                throw new ArgumentException("Expression must be a property access.", "propertyAccessExpression");
+                throw new ArgumentException("Expression must be a property access.", nameof(propertyAccessExpression));
 
             // verify that the member is a property
             if ((expr.Member.MemberType & MemberTypes.Property) != MemberTypes.Property && 
                 (expr.Member.MemberType & MemberTypes.Field) != MemberTypes.Field)
-                throw new ArgumentException("Accessed member must be a property.", "propertyAccessExpression");
+                throw new ArgumentException("Accessed member must be a property.", nameof(propertyAccessExpression));
             return expr.Member.Name;
         }
     }

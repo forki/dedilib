@@ -147,6 +147,7 @@ namespace DediLib.Tests
             Assert.AreEqual(1, counterSignal.CurrentValue);
         }
 
+        [Category("Benchmark")]
         [Explicit]
         [Test]
         public void benchmark_get_value()
@@ -165,9 +166,10 @@ namespace DediLib.Tests
 
             if (value) Console.WriteLine(); // prevent too aggressive optimization
 
-            Assert.Inconclusive("{0} ({1:N0} ops/sec)", sw.Elapsed, (decimal)iterations / sw.ElapsedMilliseconds * 1000m);
+            Assert.Inconclusive("{0} ({1:N0} ops/sec)", sw.Elapsed, iterations / sw.Elapsed.TotalMilliseconds * 1000);
         }
 
+        [Category("Benchmark")]
         [Explicit]
         [Test]
         public void benchmark_increment_value()
@@ -182,9 +184,10 @@ namespace DediLib.Tests
             }
             sw.Stop();
 
-            Assert.Inconclusive("{0} ({1:N0} ops/sec)", sw.Elapsed, (decimal)iterations / sw.ElapsedMilliseconds * 1000m);
+            Assert.Inconclusive("{0} ({1:N0} ops/sec)", sw.Elapsed, iterations / sw.Elapsed.TotalMilliseconds * 1000);
         }
 
+        [Category("Benchmark")]
         [Explicit]
         [Test]
         public void benchmark_add_value()
@@ -199,7 +202,7 @@ namespace DediLib.Tests
             }
             sw.Stop();
 
-            Assert.Inconclusive("{0} ({1:N0} ops/sec)", sw.Elapsed, (decimal)iterations / sw.ElapsedMilliseconds * 1000m);
+            Assert.Inconclusive("{0} ({1:N0} ops/sec)", sw.Elapsed, iterations / sw.Elapsed.TotalMilliseconds * 1000);
         }
     }
 }

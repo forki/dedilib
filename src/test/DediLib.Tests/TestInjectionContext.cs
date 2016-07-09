@@ -295,7 +295,7 @@ namespace DediLib.Tests
                 }
                 sw.Stop();
 
-                var opsPerSec = count / (sw.ElapsedMilliseconds + 0.001m) * 1000m;
+                var opsPerSec = count / sw.Elapsed.TotalMilliseconds * 1000;
                 Assert.Inconclusive($"{sw.Elapsed} ({opsPerSec.ToString("N0")} ops/sec)");
             }
         }
@@ -317,7 +317,7 @@ namespace DediLib.Tests
                 }
                 sw.Stop();
 
-                var opsPerSec = count / (sw.ElapsedMilliseconds + 0.001m) * 1000m;
+                var opsPerSec = count / sw.Elapsed.TotalMilliseconds * 1000;
                 Assert.Inconclusive($"{sw.Elapsed} ({opsPerSec.ToString("N0")} ops/sec)");
             }
         }

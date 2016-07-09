@@ -32,7 +32,7 @@ namespace DediLib.Logging
             if (methodInfo == null)
                 throw new InvalidOperationException("Could not find 'GetLogger' method");
 
-            return name => methodInfo.Invoke(null, new[] { name });
+            return name => methodInfo.Invoke(null, new[] { name ?? "" });
         }
 
         private Type _logger;

@@ -41,6 +41,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -85,6 +86,10 @@
     <Compile Include="Logging\NLogLooseBinding.cs" />
     <Compile Include="Logging\NullLogger.cs" />
     <Compile Include="NameOf.cs" />
+    <Compile Include="Net\IPAddressComparer.cs" />
+    <Compile Include="Net\IPAddressHelper.cs" />
+    <Compile Include="Net\IPRange.cs" />
+    <Compile Include="Net\IPRangeDictionary.cs" />
     <Compile Include="PlatformHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyCopier.cs" />

@@ -11,24 +11,15 @@ namespace DediLib
     {
         private struct TimedValue
         {
-            private readonly long _timeStamp;
-            private readonly double _value;
-
             public TimedValue(long timeStamp, double value)
             {
-                _timeStamp = timeStamp;
-                _value = value;
+                TimeStamp = timeStamp;
+                Value = value;
             }
 
-            public double Value
-            {
-                get { return _value; }
-            }
+            public double Value { get; }
 
-            public long TimeStamp
-            {
-                get { return _timeStamp; }
-            }
+            public long TimeStamp { get; }
         }
 
         private readonly LinkedList<TimedValue> _data; // Collected data
@@ -63,10 +54,7 @@ namespace DediLib
         /// <summary>
         /// Returns the "r" value which can indicate how "good" is the estimation (the closer to 1.0 the better)
         /// </summary>
-        public double Correlation
-        {
-            get { return _lastCorrelationCoefficient; }
-        }
+        public double Correlation => _lastCorrelationCoefficient;
 
         public TimeSpan WindowDuration
         {

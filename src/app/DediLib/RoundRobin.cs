@@ -8,21 +8,12 @@ namespace DediLib
         private int _currentRound;
 
         private readonly Action<T> _onSelected;
-        public Action<T> OnSelected
-        {
-            get { return _onSelected; }
-        }
+        public Action<T> OnSelected => _onSelected;
 
         private readonly int _rounds;
-        public int Rounds
-        {
-            get { return _rounds; }
-        }
+        public int Rounds => _rounds;
 
-        public T Current
-        {
-            get { return _items[_currentRound]; }
-        }
+        public T Current => _items[_currentRound];
 
         public T Last
         {
@@ -36,7 +27,7 @@ namespace DediLib
 
         public RoundRobin(int rounds = 2, Action<T> onSelected = null)
         {
-            if (rounds < 2) throw new ArgumentOutOfRangeException("rounds", "rounds must be at least 2");
+            if (rounds < 2) throw new ArgumentOutOfRangeException(nameof(rounds), "rounds must be at least 2");
 
             _onSelected = onSelected ?? (t => { });
 

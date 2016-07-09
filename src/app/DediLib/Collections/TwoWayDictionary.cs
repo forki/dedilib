@@ -88,7 +88,7 @@ namespace DediLib.Collections
                     return;
                 }
 
-                bool removed = _reverseDict.Remove(valLeft);
+                var removed = _reverseDict.Remove(valLeft);
                 try
                 {
                     _reverseDict.Add(value, key);

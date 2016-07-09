@@ -39,6 +39,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -57,6 +58,12 @@
     <Compile Include="IO\TestExecutableRunner.cs" />
     <Compile Include="IO\TestFileNameCleaner.cs" />
     <Compile Include="IO\TestStreamTransferrer.cs" />
+    <Compile Include="Logging\TestLogger.cs" />
+    <Compile Include="Logging\TestNLogLogger.cs" />
+    <Compile Include="Net\TestIPAddressComparer.cs" />
+    <Compile Include="Net\TestIPAddressHelper.cs" />
+    <Compile Include="Net\TestIPRangeDictionary.cs" />
+    <Compile Include="Net\TestIPRange.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IO\TestStreamSplitter.cs" />
     <Compile Include="TestClientPool.cs" />

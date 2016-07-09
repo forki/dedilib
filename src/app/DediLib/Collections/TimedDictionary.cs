@@ -13,9 +13,9 @@ namespace DediLib.Collections
 
         public TimeSpan DefaultExpiry { get; set; }
 
-        public int Count { get { return _dict.Count; } }
+        public int Count => _dict.Count;
 
-        public IEnumerable<TKey> Keys { get { return _dict.Keys; } }
+        public IEnumerable<TKey> Keys => _dict.Keys;
 
         /// <summary>
         /// Period when to clean up expired values (however granularity >1 sec)

@@ -81,13 +81,14 @@ namespace DediLib.Tests
             Assert.IsTrue(oldValue);
         }
 
+        [Category("Benchmark")]
         [Explicit]
         [Test]
         public void benchmark_get_value()
         {
             var interlockedBoolean = new InterlockedBoolean();
 
-            const int iterations = 10000000;
+            const int iterations = 100000000;
             var value = false;
 
             var sw = Stopwatch.StartNew();
@@ -99,16 +100,17 @@ namespace DediLib.Tests
 
             if (value) Console.WriteLine(); // prevent too aggressive optimization
 
-            Assert.Inconclusive("{0} ({1:N0} ops/sec)", sw.Elapsed, (decimal)iterations / sw.ElapsedMilliseconds * 1000m);
+            Assert.Inconclusive("{0} ({1:N0} ops/sec)", sw.Elapsed, iterations / sw.Elapsed.TotalMilliseconds * 1000);
         }
 
+        [Category("Benchmark")]
         [Explicit]
         [Test]
         public void benchmark_set_value()
         {
             var interlockedBoolean = new InterlockedBoolean();
 
-            const int iterations = 10000000;
+            const int iterations = 100000000;
             var sw = Stopwatch.StartNew();
             for (var i = 0; i < iterations; i++)
             {
@@ -116,7 +118,7 @@ namespace DediLib.Tests
             }
             sw.Stop();
 
-            Assert.Inconclusive("{0} ({1:N0} ops/sec)", sw.Elapsed, (decimal)iterations / sw.ElapsedMilliseconds * 1000m);
+            Assert.Inconclusive("{0} ({1:N0} ops/sec)", sw.Elapsed, iterations / sw.Elapsed.TotalMilliseconds * 1000);
         }
     }
 }

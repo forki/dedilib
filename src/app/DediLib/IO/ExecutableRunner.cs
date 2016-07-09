@@ -39,8 +39,8 @@ namespace DediLib.IO
 
         public void SetEnvironmentVariable(string name, string value)
         {
-            if (name == null) throw new ArgumentNullException("name");
-            if (value == null) throw new ArgumentNullException("value");
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            if (value == null) throw new ArgumentNullException(nameof(value));
 
             _envVars[name] = value;
         }
@@ -107,8 +107,8 @@ namespace DediLib.IO
 
         private Task BeginReadOutput(StreamReader reader, StringBuilder sb, Action<string> lineEvent)
         {
-            if (reader == null) throw new ArgumentNullException("reader");
-            if (sb == null) throw new ArgumentNullException("sb");
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (sb == null) throw new ArgumentNullException(nameof(sb));
 
             return Task.Factory.StartNew(() =>
             {

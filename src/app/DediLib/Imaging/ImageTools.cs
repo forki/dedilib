@@ -95,15 +95,15 @@ namespace DediLib.Imaging
         /// </exception>
         public static Bitmap CropImage(Image source, int x1, int y1, int x2, int y2)
         {
-            if ((x1 < 0) || (x1 > source.Width)) throw new ArgumentOutOfRangeException("x1");
-            if ((y1 < 0) || (y1 > source.Height)) throw new ArgumentOutOfRangeException("y1");
-            if ((x2 < 0) || (x2 > source.Width)) throw new ArgumentOutOfRangeException("x2");
-            if ((y2 < 0) || (y2 > source.Height)) throw new ArgumentOutOfRangeException("y2");
+            if ((x1 < 0) || (x1 > source.Width)) throw new ArgumentOutOfRangeException(nameof(x1));
+            if ((y1 < 0) || (y1 > source.Height)) throw new ArgumentOutOfRangeException(nameof(y1));
+            if ((x2 < 0) || (x2 > source.Width)) throw new ArgumentOutOfRangeException(nameof(x2));
+            if ((y2 < 0) || (y2 > source.Height)) throw new ArgumentOutOfRangeException(nameof(y2));
 
             var width = x2 - x1;
             var height = y2 - y1;
-            if (width <= 0) throw new ArgumentOutOfRangeException("x2", x2, "Right X value must be greater than left X value");
-            if (height <= 0) throw new ArgumentOutOfRangeException("y2", y2, "Bottom Y value must be greater than top Y value");
+            if (width <= 0) throw new ArgumentOutOfRangeException(nameof(x2), x2, "Right X value must be greater than left X value");
+            if (height <= 0) throw new ArgumentOutOfRangeException(nameof(y2), y2, "Bottom Y value must be greater than top Y value");
 
             var bmpSource = new Bitmap(source);
             var bmpRes = new Bitmap(width, height);
@@ -120,7 +120,7 @@ namespace DediLib.Imaging
                 var scanRes = bdRes.Scan0;
 
                 var buf = new byte[width * 4];
-                for (int y = 0; y < height; y++)
+                for (var y = 0; y < height; y++)
                 {
                     Marshal.Copy(scanSource, buf, 0, buf.Length);
                     Marshal.Copy(buf, 0, scanRes, buf.Length);
@@ -159,7 +159,7 @@ namespace DediLib.Imaging
         /// <exception cref="ArgumentNullException">image</exception>
         public static byte[] GetImagePixelHashSha1(Image image)
         {
-            if (image == null) throw new ArgumentNullException("image");
+            if (image == null) throw new ArgumentNullException(nameof(image));
 
             byte[] hash;
             SHA1 sha1 = SHA1.Create("SHA1");
@@ -413,7 +413,7 @@ namespace DediLib.Imaging
         /// <returns></returns>
         private static KeyValuePair<ImageCodecInfo, EncoderParameters> PrepareJpegEncoderQuality(int quality)
         {
-            if (quality < 0 || quality > 100) throw new ArgumentOutOfRangeException("quality", "Quality must be between 0 and 100.");
+            if (quality < 0 || quality > 100) throw new ArgumentOutOfRangeException(nameof(quality), "Quality must be between 0 and 100.");
 
             // Encoder parameter for image quality
             var qualityParam = new EncoderParameter(Encoder.Quality, quality);

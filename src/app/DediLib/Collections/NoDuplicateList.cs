@@ -8,10 +8,10 @@ namespace DediLib.Collections
         private List<T> _list;
         private HashSet<T> _hashSet;
 
-        public int Count { get { return _hashSet.Count; } }
-        public int Capacity { get { return _list.Capacity; } }
+        public int Count => _hashSet.Count;
+        public int Capacity => _list.Capacity;
 
-        public bool IsReadOnly { get { return false; } }
+        public bool IsReadOnly => false;
 
         public NoDuplicateList()
         {

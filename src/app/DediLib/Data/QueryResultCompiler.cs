@@ -11,7 +11,7 @@ namespace DediLib.Data
         public static Func<IDataReader, List<TU>> CompileDataReaderToObject<TU>(IDataReader reader)
             where TU : new()
         {
-            if (reader == null) throw new ArgumentNullException("reader");
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
 
             var dataReader = Expression.Parameter(typeof(IDataReader), "dataReader");
             var readerType = reader.GetType();
@@ -59,11 +59,11 @@ namespace DediLib.Data
                     if (nullableType != null)
                     {
                         if (!IsAssignableType(type, nullableType))
-                            throw new ArgumentException(string.Format("Nullable property type in field {0} ({1}) cannot be assigned with value type {2}", name, nullableType, type));
+                            throw new ArgumentException($"Nullable property type in field {name} ({nullableType}) cannot be assigned with value type {type}");
                         nullable = true;
                         castToType = type != nullableType ? pi.PropertyType : null;
                     }
-                    else throw new ArgumentException(string.Format("Property type field {0} ({1}) cannot be assigned with value type {2}", name, pi.PropertyType, type));
+                    else throw new ArgumentException($"Property type field {name} ({pi.PropertyType}) cannot be assigned with value type {type}");
                 }
                 else
                 {
@@ -91,9 +91,9 @@ namespace DediLib.Data
                     case TypeCode.UInt64: mi = readerType.GetMethod("GetInt64", new[] { typeof(int) }); break;
                     case TypeCode.Object:
                         if (type == typeof(Guid)) { mi = readerType.GetMethod("GetGuid", new[] { typeof(int) }); break; }
-                        throw new NotSupportedException(string.Format("Data type {0} is not supported", type));
+                        throw new NotSupportedException($"Data type {type} is not supported");
                     default:
-                        throw new NotSupportedException(string.Format("Data type {0} is not supported", type));
+                        throw new NotSupportedException($"Data type {type} is not supported");
                 }
 
                 // DEBUG:

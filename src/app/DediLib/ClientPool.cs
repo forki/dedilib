@@ -34,7 +34,7 @@ namespace DediLib
 
         public ClientPool(int maxNumberOfClients, Func<T> createInstance, Action<T> freeAction)
         {
-            if (createInstance == null) throw new ArgumentNullException("createInstance");
+            if (createInstance == null) throw new ArgumentNullException(nameof(createInstance));
 
             _createInstance = createInstance;
             _freeAction = freeAction;
@@ -107,7 +107,7 @@ namespace DediLib
 
         public bool Return(T client)
         {
-            if (client == null) throw new ArgumentNullException("client");
+            if (client == null) throw new ArgumentNullException(nameof(client));
             if (_disposed.Value)
                 throw new ObjectDisposedException(typeof(ClientPool<T>).Name);
 
@@ -123,7 +123,7 @@ namespace DediLib
 
         public bool DiscardBusyClient(T client)
         {
-            if (client == null) throw new ArgumentNullException("client");
+            if (client == null) throw new ArgumentNullException(nameof(client));
             if (_disposed.Value)
                 throw new ObjectDisposedException(typeof(ClientPool<T>).Name);
 

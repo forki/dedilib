@@ -4,11 +4,17 @@ namespace DediLib.Logging
 {
     public class NullLogger : ILogger
     {
-        private ITimeSource _timeSource = new DefaultTimeSource();
-        public ITimeSource TimeSource
+        public string Name { get; }
+
+        public ITimeSource TimeSource { get; set; } = new DefaultTimeSource();
+
+        public NullLogger()
         {
-            get { return _timeSource; }
-            set { _timeSource = value; }
+        }
+
+        public NullLogger(string name)
+        {
+            Name = name;
         }
 
         public void Debug(string logText, params object[] formatValues)

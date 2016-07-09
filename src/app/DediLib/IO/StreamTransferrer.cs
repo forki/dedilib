@@ -15,8 +15,8 @@ namespace DediLib.IO
 
         public StreamTransferrer(Stream inputStream, Stream outputStream, bool autoClose = true, int bufSize = 1024 * 1024)
         {
-            if (inputStream == null) throw new ArgumentNullException("inputStream");
-            if (outputStream == null) throw new ArgumentNullException("outputStream");
+            if (inputStream == null) throw new ArgumentNullException(nameof(inputStream));
+            if (outputStream == null) throw new ArgumentNullException(nameof(outputStream));
 
             _inputStream = inputStream;
             _outputStreams.Add(outputStream);
@@ -26,8 +26,8 @@ namespace DediLib.IO
 
         public StreamTransferrer(Stream inputStream, IEnumerable<Stream> outputStreams, bool autoClose = true, int bufSize = 1024 * 1024)
         {
-            if (inputStream == null) throw new ArgumentNullException("inputStream");
-            if (outputStreams == null) throw new ArgumentNullException("outputStreams");
+            if (inputStream == null) throw new ArgumentNullException(nameof(inputStream));
+            if (outputStreams == null) throw new ArgumentNullException(nameof(outputStreams));
 
             _inputStream = inputStream;
             _outputStreams.AddRange(outputStreams);
@@ -37,7 +37,7 @@ namespace DediLib.IO
 
         public async Task Transfer(params Action<byte[], int>[] hooks)
         {
-            await Transfer(CancellationToken.None, hooks);
+            await Transfer(CancellationToken.None, hooks).ConfigureAwait(false);
         }
 
         public async Task Transfer(CancellationToken cancellationToken, params Action<byte[], int>[] hooks)
@@ -46,7 +46,7 @@ namespace DediLib.IO
 
             int read;
             var tasks = new Task[_outputStreams.Count];
-            while ((read = await _inputStream.ReadAsync(buf, 0, buf.Length, cancellationToken)) != 0)
+            while ((read = await _inputStream.ReadAsync(buf, 0, buf.Length, cancellationToken).ConfigureAwait(false)) != 0)
             {
                 if (hooks != null)
                 {
@@ -58,7 +58,7 @@ namespace DediLib.IO
                 {
                     tasks[i] = _outputStreams[i].WriteAsync(buf, 0, read, cancellationToken);
                 }
-                await Task.WhenAll(tasks);
+                await Task.WhenAll(tasks).ConfigureAwait(false);
             }
         }
 
@@ -76,7 +76,7 @@ namespace DediLib.IO
                 {
                     if (_autoClose)
                     {
-                        if (_inputStream != null) _inputStream.Dispose();
+                        _inputStream?.Dispose();
                         if (_outputStreams != null)
                         {
                             foreach (var outputStream in _outputStreams)

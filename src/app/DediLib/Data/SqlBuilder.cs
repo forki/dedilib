@@ -8,8 +8,8 @@ namespace DediLib.Data
     {
         public string Select(string tableName, params string[] columnNames)
         {
-            if (columnNames == null) throw new ArgumentNullException("columnNames");
-            if (tableName == null) throw new ArgumentNullException("tableName");
+            if (columnNames == null) throw new ArgumentNullException(nameof(columnNames));
+            if (tableName == null) throw new ArgumentNullException(nameof(tableName));
 
             var sql = new StringBuilder("SELECT ");
             if (!columnNames.Any())
@@ -34,8 +34,8 @@ namespace DediLib.Data
 
         public string Update(string tableName, params string[] columnNames)
         {
-            if (tableName == null) throw new ArgumentNullException("tableName");
-            if (columnNames == null) throw new ArgumentNullException("columnNames");
+            if (tableName == null) throw new ArgumentNullException(nameof(tableName));
+            if (columnNames == null) throw new ArgumentNullException(nameof(columnNames));
             if (!columnNames.Any())
                 throw new ArgumentException("Missing column names");
 

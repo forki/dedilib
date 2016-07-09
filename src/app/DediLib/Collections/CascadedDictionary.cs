@@ -7,10 +7,7 @@ namespace DediLib.Collections
 {
     public class CascadedDictionary<T1, T2> : ConcurrentDictionary<T1, T2>
     {
-        public IEnumerable<T2> AllValues
-        {
-            get { return Values; }
-        }
+        public IEnumerable<T2> AllValues => Values;
 
         [TargetedPatchingOptOut("")]
         public bool TryRemove(T1 key)
@@ -36,9 +33,9 @@ namespace DediLib.Collections
             get
             {
                 CascadedDictionary<T2, T3> subDict;
-                if (!TryGetValue(t, out subDict)) throw new KeyNotFoundException(string.Format("First key {0} not found in dictionary", t));
+                if (!TryGetValue(t, out subDict)) throw new KeyNotFoundException($"First key {t} not found in dictionary");
                 T3 value;
-                if (!subDict.TryGetValue(u, out value)) throw new KeyNotFoundException(string.Format("Keys {0}, {1} not found in dictionary", t, u));
+                if (!subDict.TryGetValue(u, out value)) throw new KeyNotFoundException($"Keys {t}, {u} not found in dictionary");
                 return value;
             }
             set
@@ -126,9 +123,9 @@ namespace DediLib.Collections
             get
             {
                 CascadedDictionary<T2, T3, T4> subDict;
-                if (!TryGetValue(t, out subDict)) throw new KeyNotFoundException(string.Format("First key {0} not found in dictionary", t));
+                if (!TryGetValue(t, out subDict)) throw new KeyNotFoundException($"First key {t} not found in dictionary");
                 CascadedDictionary<T3, T4> subSubDict;
-                if (!subDict.TryGetValue(u, out subSubDict)) throw new KeyNotFoundException(string.Format("Keys {0}, {1} not found in dictionary", t, u));
+                if (!subDict.TryGetValue(u, out subSubDict)) throw new KeyNotFoundException($"Keys {t}, {u} not found in dictionary");
                 return subSubDict;
             }
             set
@@ -143,11 +140,11 @@ namespace DediLib.Collections
             get
             {
                 CascadedDictionary<T2, T3, T4> subDict;
-                if (!TryGetValue(t, out subDict)) throw new KeyNotFoundException(string.Format("First key {0} not found in dictionary", t));
+                if (!TryGetValue(t, out subDict)) throw new KeyNotFoundException($"First key {t} not found in dictionary");
                 CascadedDictionary<T3, T4> subSubDict;
-                if (!subDict.TryGetValue(u, out subSubDict)) throw new KeyNotFoundException(string.Format("Keys {0}, {1} not found in dictionary", t, u));
+                if (!subDict.TryGetValue(u, out subSubDict)) throw new KeyNotFoundException($"Keys {t}, {u} not found in dictionary");
                 T4 value;
-                if (!subSubDict.TryGetValue(v, out value)) throw new KeyNotFoundException(string.Format("Keys {0}, {1}, {2} not found in dictionary", t, u, v));
+                if (!subSubDict.TryGetValue(v, out value)) throw new KeyNotFoundException($"Keys {t}, {u}, {v} not found in dictionary");
                 return value;
             }
             set

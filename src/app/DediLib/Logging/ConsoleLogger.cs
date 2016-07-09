@@ -14,7 +14,7 @@ namespace DediLib.Logging
         public ConsoleLogger(ITimeSource timeSource)
             : this()
         {
-            if (timeSource == null) throw new ArgumentNullException("timeSource");
+            if (timeSource == null) throw new ArgumentNullException(nameof(timeSource));
             _timeSource = timeSource;
         }
 
@@ -31,6 +31,9 @@ namespace DediLib.Logging
         private readonly object _consoleLock = new object();
 
         private ITimeSource _timeSource = new DefaultTimeSource();
+
+        public string Name { get; set; }
+
         public ITimeSource TimeSource
         {
             get { return _timeSource; }

@@ -20,7 +20,7 @@ namespace DediLib.Collections
 
         public static void Register(ITimedDictionary timedDictionary)
         {
-            if (timedDictionary == null) throw new ArgumentNullException("timedDictionary");
+            if (timedDictionary == null) throw new ArgumentNullException(nameof(timedDictionary));
             if (!TimedDictionaries.TryAdd(timedDictionary, DateTime.UtcNow)) return;
 
             if (Interlocked.Increment(ref TimedDictionartiesCount) != 1) return;
@@ -34,7 +34,7 @@ namespace DediLib.Collections
 
         public static void Unregister(ITimedDictionary timedDictionary)
         {
-            if (timedDictionary == null) throw new ArgumentNullException("timedDictionary");
+            if (timedDictionary == null) throw new ArgumentNullException(nameof(timedDictionary));
 
             DateTime dummy;
             if (!TimedDictionaries.TryRemove(timedDictionary, out dummy)) return;
@@ -42,10 +42,7 @@ namespace DediLib.Collections
             if (Interlocked.Decrement(ref TimedDictionartiesCount) != 0) return;
 
             var cleanUpTask = Interlocked.Exchange(ref _cleanUpTask, null);
-            if (cleanUpTask != null)
-            {
-                cleanUpTask.Cancel();
-            }
+            cleanUpTask?.Cancel();
         }
 
         static void CleanUp(CancellationToken cancellationToken)

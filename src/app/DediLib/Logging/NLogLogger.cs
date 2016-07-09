@@ -8,10 +8,13 @@ namespace DediLib.Logging
 
         private readonly object _logger;
 
+        public string Name { get; }
+
         public ITimeSource TimeSource { get; set; }
 
         public NLogLogger(string name)
         {
+            Name = name;
             _logger = NLogBinding.GetCreateLoggerMethod().Invoke(name);
         }
 

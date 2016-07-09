@@ -13,7 +13,7 @@ namespace DediLib.Logging
 
         public LoggingTextWriter(ILogger logger, LogLevel logLevel = LogLevel.Debug)
         {
-            if (logger == null) throw new ArgumentNullException("logger");
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
             _logger = logger;
 
             _logLevel = logLevel;

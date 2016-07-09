@@ -2,6 +2,7 @@
 using DediLib.Collections;
 using NUnit.Framework;
 
+// ReSharper disable UseCollectionCountProperty
 namespace DediLib.Tests.Collections
 {
     [TestFixture]

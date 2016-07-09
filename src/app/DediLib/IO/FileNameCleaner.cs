@@ -6,9 +6,9 @@ namespace DediLib.IO
 {
     public class FileNameCleaner
     {
-        readonly Regex _regexSearchInvalidFileNameChars = new Regex(string.Format("[{0}]", Regex.Escape(new string(Path.GetInvalidFileNameChars()))), RegexOptions.Compiled);
-        readonly Regex _regexSearchInvalidPathChars = new Regex(string.Format("[{0}]", Regex.Escape(new string(Path.GetInvalidPathChars()))), RegexOptions.Compiled);
-        readonly Regex _regexSearchAllInvalidChars = new Regex(string.Format("[{0}]", Regex.Escape(new string(Path.GetInvalidFileNameChars().Union(Path.GetInvalidPathChars()).Distinct().ToArray()))), RegexOptions.Compiled);
+        readonly Regex _regexSearchInvalidFileNameChars = new Regex($"[{Regex.Escape(new string(Path.GetInvalidFileNameChars()))}]", RegexOptions.Compiled);
+        readonly Regex _regexSearchInvalidPathChars = new Regex($"[{Regex.Escape(new string(Path.GetInvalidPathChars()))}]", RegexOptions.Compiled);
+        readonly Regex _regexSearchAllInvalidChars = new Regex($"[{Regex.Escape(new string(Path.GetInvalidFileNameChars().Union(Path.GetInvalidPathChars()).Distinct().ToArray()))}]", RegexOptions.Compiled);
 
         public string ReplaceInvalidFileChars(string fileName, string replaceValue = "")
         {
