@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using DediLib.Collections;
 using NUnit.Framework;
 
@@ -21,6 +22,15 @@ namespace DediLib.Tests.Collections
         public void Add_same_item_twice_count_one()
         {
             var list = new NoDuplicateList<string> { "test", "test" };
+
+            Assert.AreEqual(1, list.Count);
+            Assert.AreEqual(1, list.Count());
+        }
+
+        [Test]
+        public void Add_same_item_twice_case_insensitive_count_one()
+        {
+            var list = new NoDuplicateList<string>(StringComparer.InvariantCultureIgnoreCase) { "test", "Test" };
 
             Assert.AreEqual(1, list.Count);
             Assert.AreEqual(1, list.Count());

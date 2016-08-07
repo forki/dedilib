@@ -53,6 +53,7 @@
     <Compile Include="Collections\TestHashSetStringExtensions.cs" />
     <Compile Include="Collections\TestNoDuplicateList.cs" />
     <Compile Include="Collections\TestTimedDictionary.cs" />
+    <Compile Include="Collections\TestTimeSeriesLookupList.cs" />
     <Compile Include="Configuration\TestConnectionStringBuilder.cs" />
     <Compile Include="Data\TestSqlBuilder.cs" />
     <Compile Include="IO\TestExecutableRunner.cs" />

@@ -178,6 +178,14 @@ namespace DediLib.Collections
         }
 
         [TargetedPatchingOptOut("")]
+        public bool TryRemove(T1 t, T2 u)
+        {
+            CascadedDictionary<T2, T3, T4> subDict;
+            if (!TryGetValue(t, out subDict)) return false;
+            return subDict.TryRemove(u);
+        }
+
+        [TargetedPatchingOptOut("")]
         public bool TryRemove(T1 t, T2 u, T3 v)
         {
             CascadedDictionary<T2, T3, T4> subDict;

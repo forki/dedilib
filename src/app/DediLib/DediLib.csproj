@@ -60,6 +60,7 @@
     <Compile Include="Collections\TimedDictionary.cs" />
     <Compile Include="Collections\TimedDictionaryWorker.cs" />
     <Compile Include="Collections\TimedValue.cs" />
+    <Compile Include="Collections\TimeSeriesLookupList.cs" />
     <Compile Include="Collections\TwoWayDictionary.cs" />
     <Compile Include="Configuration\ConnectionStringBuilder.cs" />
     <Compile Include="Configuration\CustomConfigurationReader.cs" />

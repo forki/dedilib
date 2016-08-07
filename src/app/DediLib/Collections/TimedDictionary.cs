@@ -148,7 +148,7 @@ namespace DediLib.Collections
             lock (_cleanUpLock)
             {
                 foreach (var pair in _dict)
-                    if ((DateTime.UtcNow - pair.Value.LastAccessUtc) > pair.Value.Expiry)
+                    if (DateTime.UtcNow - pair.Value.LastAccessUtc > pair.Value.Expiry)
                         TryRemove(pair.Key);
             }
         }

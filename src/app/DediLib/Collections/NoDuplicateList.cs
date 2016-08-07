@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace DediLib.Collections
@@ -13,14 +14,36 @@ namespace DediLib.Collections
 
         public bool IsReadOnly => false;
 
+        private readonly Action _clear;
+
         public NoDuplicateList()
         {
+            _clear = () =>
+            {
+                _list = new List<T>();
+                _hashSet = new HashSet<T>();
+            };
+            Clear();
+        }
+
+        public NoDuplicateList(IEqualityComparer<T> equalityComparer)
+        {
+            _clear = () =>
+            {
+                _list = new List<T>();
+                _hashSet = new HashSet<T>(equalityComparer);
+            };
             Clear();
         }
 
         public NoDuplicateList(int capacity)
         {
-            CreateWithCapacity(capacity);
+            _clear = () =>
+            {
+                _list = new List<T>(capacity);
+                _hashSet = new HashSet<T>();
+            };
+            Clear();
         }
 
         public bool Add(T item)
@@ -43,14 +66,7 @@ namespace DediLib.Collections
 
         public void Clear()
         {
-            _list = new List<T>();
-            _hashSet = new HashSet<T>();
-        }
-
-        private void CreateWithCapacity(int capacity)
-        {
-            _list = new List<T>(capacity);
-            _hashSet = new HashSet<T>();
+            _clear();
         }
 
         public bool Contains(T item)
