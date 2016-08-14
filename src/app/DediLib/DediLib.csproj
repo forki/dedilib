@@ -56,6 +56,8 @@
     <Compile Include="Collections\CascadedDictionary.cs" />
     <Compile Include="Collections\DictionaryExtensions.cs" />
     <Compile Include="Collections\HashSetExtensions.cs" />
+    <Compile Include="Collections\ListDictionary.cs" />
+    <Compile Include="Collections\HashSetDictionary.cs" />
     <Compile Include="Collections\ITimedDictionary.cs" />
     <Compile Include="Collections\NoDuplicateList.cs" />
     <Compile Include="Collections\TimedDictionary.cs" />
