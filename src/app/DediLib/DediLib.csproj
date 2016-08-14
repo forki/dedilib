@@ -54,6 +54,7 @@
     </Compile>
     <Compile Include="ClientPool.cs" />
     <Compile Include="Collections\CascadedDictionary.cs" />
+    <Compile Include="Collections\DictionaryExtensions.cs" />
     <Compile Include="Collections\HashSetExtensions.cs" />
     <Compile Include="Collections\ITimedDictionary.cs" />
     <Compile Include="Collections\NoDuplicateList.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="Collections\TimedValue.cs" />
     <Compile Include="Collections\TimeSeriesLookupList.cs" />
     <Compile Include="Collections\TwoWayDictionary.cs" />
+    <Compile Include="Collections\TwoWayDictionaryExtensions.cs" />
     <Compile Include="Configuration\ConnectionStringBuilder.cs" />
     <Compile Include="Configuration\CustomConfigurationReader.cs" />
     <Compile Include="Configuration\LoadConfigHelpers.cs" />
