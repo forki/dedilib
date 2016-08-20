@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace DediLib.Collections
@@ -18,6 +19,25 @@ namespace DediLib.Collections
             result = createFunc(key);
             dictionary[key] = result;
             return result;
+        }
+
+        public static TValue TryGet<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
+            where TValue : class
+        {
+            if (dictionary == null) return null;
+            if (key == null) return null;
+
+            TValue value;
+            if (dictionary.TryGetValue(key, out value))
+                return value;
+
+            return null;
+        }
+
+        public static bool TryRemove<TKey, TValue>(this ConcurrentDictionary<TKey, TValue> dictionary, TKey key)
+        {
+            TValue dummy;
+            return dictionary.TryRemove(key, out dummy);
         }
     }
 }

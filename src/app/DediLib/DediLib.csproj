@@ -54,7 +54,9 @@
     </Compile>
     <Compile Include="ClientPool.cs" />
     <Compile Include="Collections\CascadedDictionary.cs" />
+    <Compile Include="Collections\CollectionWrapper.cs" />
     <Compile Include="Collections\DictionaryExtensions.cs" />
+    <Compile Include="Collections\EnumerableExtensions.cs" />
     <Compile Include="Collections\HashSetExtensions.cs" />
     <Compile Include="Collections\ListDictionary.cs" />
     <Compile Include="Collections\HashSetDictionary.cs" />
