@@ -50,6 +50,8 @@
     <Compile Include="..\..\app\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="Collections\TestListDictionary.cs" />
+    <Compile Include="Collections\TestHashSetDictionary.cs" />
     <Compile Include="Collections\TestHashSetStringExtensions.cs" />
     <Compile Include="Collections\TestNoDuplicateList.cs" />
     <Compile Include="Collections\TestTimedDictionary.cs" />

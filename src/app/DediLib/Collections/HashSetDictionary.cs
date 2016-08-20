@@ -149,6 +149,7 @@ namespace DediLib.Collections
 
             TValue existingItem;
             HashSet<TValue> existingList;
+            var added = 0;
 
             if (_singleItems.TryGetValue(key, out existingItem))
             {
@@ -158,9 +159,9 @@ namespace DediLib.Collections
                 _singleItems.Remove(key);
                 existingList.Add(existingItem);
                 foreach (var item in values)
-                    existingList.Add(item);
+                    added += existingList.Add(item) ? 1 : 0;
                 if (!_updateValuesList) _allValues.AddRange(values);
-                if (_valuesCount >= 0) _valuesCount += count;
+                if (added > 0 && _valuesCount >= 0) _valuesCount += added;
                 return;
             }
 
@@ -172,9 +173,9 @@ namespace DediLib.Collections
 
             // add items to existing list
             foreach (var item in values)
-                existingList.Add(item);
+                added += existingList.Add(item) ? 1 : 0;
             if (!_updateValuesList) _allValues.AddRange(values);
-            if (_valuesCount >= 0) _valuesCount += count;
+            if (added > 0 && _valuesCount >= 0) _valuesCount += added;
         }
 
         /// <summary>

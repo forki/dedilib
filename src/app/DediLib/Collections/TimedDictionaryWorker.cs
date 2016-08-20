@@ -64,7 +64,7 @@ namespace DediLib.Collections
                             try
                             {
                                 var now = DateTime.UtcNow;
-                                if ((now - lastCleanUp) > timedDictionary.CleanUpPeriod)
+                                if (now - lastCleanUp > timedDictionary.CleanUpPeriod)
                                 {
                                     TimedDictionaries[timedDictionary] = now;
                                     timedDictionary.CleanUp();

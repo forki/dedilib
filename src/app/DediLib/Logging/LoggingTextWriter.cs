@@ -76,22 +76,22 @@ namespace DediLib.Logging
 
         public override void Write(string format, object arg0)
         {
-            _line.Append(String.Format(format, arg0));
+            _line.Append(string.Format(format, arg0));
         }
 
         public override void Write(string format, object arg0, object arg1)
         {
-            _line.Append(String.Format(format, arg0, arg1));
+            _line.Append(string.Format(format, arg0, arg1));
         }
 
         public override void Write(string format, object arg0, object arg1, object arg2)
         {
-            _line.Append(String.Format(format, arg0, arg1, arg2));
+            _line.Append(string.Format(format, arg0, arg1, arg2));
         }
 
         public override void Write(string format, params object[] arg)
         {
-            _line.Append(String.Format(format, arg));
+            _line.Append(string.Format(format, arg));
         }
 
         public override void Write(uint value)
@@ -104,19 +104,22 @@ namespace DediLib.Logging
             _line.Append(value);
         }
 
-        public override async Task WriteAsync(char value)
+        public override Task WriteAsync(char value)
         {
             _line.Append(value);
+            return Task.FromResult(0);
         }
 
-        public override async Task WriteAsync(char[] buffer, int index, int count)
+        public override Task WriteAsync(char[] buffer, int index, int count)
         {
             _line.Append(buffer, index, count);
+            return Task.FromResult(0);
         }
 
-        public override async Task WriteAsync(string value)
+        public override Task WriteAsync(string value)
         {
             _line.Append(value);
+            return Task.FromResult(0);
         }
 
         public override void WriteLine()
@@ -247,32 +250,30 @@ namespace DediLib.Logging
             WriteLine();
         }
 
-        public override async Task WriteLineAsync()
+        public override Task WriteLineAsync()
         {
             WriteLine();
+            return Task.FromResult(0);
         }
 
         public override async Task WriteLineAsync(char value)
         {
-            await WriteAsync(value);
+            await WriteAsync(value).ConfigureAwait(false);
             WriteLine();
         }
 
         public override async Task WriteLineAsync(char[] buffer, int index, int count)
         {
-            await WriteAsync(buffer, index, count);
+            await WriteAsync(buffer, index, count).ConfigureAwait(false);
             WriteLine();
         }
 
         public override async Task WriteLineAsync(string value)
         {
-            await WriteAsync(value);
+            await WriteAsync(value).ConfigureAwait(false);
             WriteLine();
         }
 
-        public override Encoding Encoding
-        {
-            get { return Encoding.UTF8; }
-        }
+        public override Encoding Encoding => Encoding.UTF8;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,16 +7,53 @@ using System.Linq;
 namespace DediLib.Collections
 {
     [Serializable]
-    public class TimedDictionary<TKey, TValue> : ITimedDictionary, IDisposable
+    public class TimedDictionary<TKey, TValue> : ITimedDictionary, IDictionary<TKey, TValue>, IDisposable
     {
         private readonly TimeSpan _overrideDefaultExpiry = TimeSpan.FromMilliseconds(-1);
         private readonly ConcurrentDictionary<TKey, TimedValue<TValue>> _dict;
 
         public TimeSpan DefaultExpiry { get; set; }
 
-        public int Count => _dict.Count;
+        public void Add(KeyValuePair<TKey, TValue> item)
+        {
+            if (!_dict.TryAdd(item.Key, new TimedValue<TValue>(item.Value, DefaultExpiry)))
+                throw new ArgumentException("Duplicate key");
+        }
 
-        public IEnumerable<TKey> Keys => _dict.Keys;
+        public void Clear()
+        {
+            _dict.Clear();
+        }
+
+        public bool Contains(KeyValuePair<TKey, TValue> item)
+        {
+            TimedValue<TValue> timedValue;
+            if (!TryGetValue(item.Key, out timedValue))
+                return false;
+
+            return Equals(item.Value, timedValue.Value);
+        }
+
+        public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
+        {
+            var i = arrayIndex;
+            foreach (var item in _dict)
+            {
+                array[i++] = new KeyValuePair<TKey, TValue>(item.Key, item.Value.Value);
+            }
+        }
+
+        public bool Remove(KeyValuePair<TKey, TValue> item)
+        {
+            TimedValue<TValue> timedValue;
+            if (!TryGetValue(item.Key, out timedValue))
+                return false;
+
+            return Equals(item.Value, timedValue.Value);
+        }
+
+        public int Count => _dict.Count;
+        public bool IsReadOnly => false;
 
         /// <summary>
         /// Period when to clean up expired values (however granularity >1 sec)
@@ -23,6 +61,7 @@ namespace DediLib.Collections
         public TimeSpan CleanUpPeriod { get; set; }
 
         #region Dispose
+
         private bool _disposed;
         private readonly object _disposeLock = new object();
 
@@ -45,10 +84,21 @@ namespace DediLib.Collections
             Dispose(true);
         }
 
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
+        {
+            return _dict.Select(x => new KeyValuePair<TKey, TValue>(x.Key, x.Value.Value)).GetEnumerator();
+        }
+
         ~TimedDictionary()
         {
             Dispose(false);
         }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
         #endregion
 
         public TimedDictionary()
@@ -94,7 +144,8 @@ namespace DediLib.Collections
             Initialize(TimeSpan.FromMilliseconds(-1));
         }
 
-        public TimedDictionary(TimeSpan defaultExpiry, int concurrencyLevel, int capacity, IEqualityComparer<TKey> comparer)
+        public TimedDictionary(TimeSpan defaultExpiry, int concurrencyLevel, int capacity,
+            IEqualityComparer<TKey> comparer)
         {
             _dict = new ConcurrentDictionary<TKey, TimedValue<TValue>>(concurrencyLevel, capacity, comparer);
 
@@ -103,21 +154,37 @@ namespace DediLib.Collections
 
         public TimedDictionary(TimeSpan defaultExpiry, IEnumerable<KeyValuePair<TKey, TValue>> collection)
         {
-            _dict = new ConcurrentDictionary<TKey, TimedValue<TValue>>(collection.Select(x => new KeyValuePair<TKey, TimedValue<TValue>>(x.Key, new TimedValue<TValue>(x.Value, defaultExpiry))));
+            _dict =
+                new ConcurrentDictionary<TKey, TimedValue<TValue>>(
+                    collection.Select(
+                        x =>
+                            new KeyValuePair<TKey, TimedValue<TValue>>(x.Key,
+                                new TimedValue<TValue>(x.Value, defaultExpiry))));
 
             Initialize(defaultExpiry);
         }
 
-        public TimedDictionary(TimeSpan defaultExpiry, IEnumerable<KeyValuePair<TKey, TValue>> collection, IEqualityComparer<TKey> comparer)
+        public TimedDictionary(TimeSpan defaultExpiry, IEnumerable<KeyValuePair<TKey, TValue>> collection,
+            IEqualityComparer<TKey> comparer)
         {
-            _dict = new ConcurrentDictionary<TKey, TimedValue<TValue>>(collection.Select(x => new KeyValuePair<TKey, TimedValue<TValue>>(x.Key, new TimedValue<TValue>(x.Value, defaultExpiry))), comparer);
+            _dict =
+                new ConcurrentDictionary<TKey, TimedValue<TValue>>(
+                    collection.Select(
+                        x =>
+                            new KeyValuePair<TKey, TimedValue<TValue>>(x.Key,
+                                new TimedValue<TValue>(x.Value, defaultExpiry))), comparer);
 
             Initialize(defaultExpiry);
         }
 
-        public TimedDictionary(TimeSpan defaultExpiry, int concurrencyLevel, IEnumerable<KeyValuePair<TKey, TValue>> collection, IEqualityComparer<TKey> comparer)
+        public TimedDictionary(TimeSpan defaultExpiry, int concurrencyLevel,
+            IEnumerable<KeyValuePair<TKey, TValue>> collection, IEqualityComparer<TKey> comparer)
         {
-            _dict = new ConcurrentDictionary<TKey, TimedValue<TValue>>(concurrencyLevel, collection.Select(x => new KeyValuePair<TKey, TimedValue<TValue>>(x.Key, new TimedValue<TValue>(x.Value, defaultExpiry))), comparer);
+            _dict = new ConcurrentDictionary<TKey, TimedValue<TValue>>(concurrencyLevel,
+                collection.Select(
+                    x =>
+                        new KeyValuePair<TKey, TimedValue<TValue>>(x.Key, new TimedValue<TValue>(x.Value, defaultExpiry))),
+                comparer);
 
             Initialize(defaultExpiry);
         }
@@ -125,9 +192,9 @@ namespace DediLib.Collections
         private void Initialize(TimeSpan defaultExpiry)
         {
             var cleanUpPeriod =
-                defaultExpiry == _overrideDefaultExpiry ?
-                TimeSpan.FromSeconds(1) :
-                TimeSpan.FromSeconds(defaultExpiry.TotalSeconds / 10);
+                defaultExpiry == _overrideDefaultExpiry
+                    ? TimeSpan.FromSeconds(1)
+                    : TimeSpan.FromSeconds(defaultExpiry.TotalSeconds / 10);
 
             if (cleanUpPeriod > TimeSpan.FromMinutes(1))
                 cleanUpPeriod = TimeSpan.FromMinutes(1);
@@ -143,6 +210,7 @@ namespace DediLib.Collections
         }
 
         private readonly object _cleanUpLock = new object();
+
         public void CleanUp()
         {
             lock (_cleanUpLock)
@@ -233,28 +301,70 @@ namespace DediLib.Collections
             return timedValue.Value;
         }
 
-        public TValue AddOrUpdate(TKey key, TValue addValue, Func<TKey, TValue, TValue> updateValueFactory, bool updateAccessTime = true)
+        public TValue AddOrUpdate(TKey key, TValue addValue, Func<TKey, TValue, TValue> updateValueFactory,
+            bool updateAccessTime = true)
         {
             return AddOrUpdate(key, addValue, updateValueFactory, DefaultExpiry, updateAccessTime);
         }
 
-        public TValue AddOrUpdate(TKey key, TValue addValue, Func<TKey, TValue, TValue> updateValueFactory, TimeSpan expires, bool updateAccessTime = true)
+        public TValue AddOrUpdate(TKey key, TValue addValue, Func<TKey, TValue, TValue> updateValueFactory,
+            TimeSpan expires, bool updateAccessTime = true)
         {
-            var timedValue = _dict.AddOrUpdate(key, new TimedValue<TValue>(addValue, expires), (k, v) => { v.Value = updateValueFactory(k, v.Value); return v; });
+            var timedValue = _dict.AddOrUpdate(key, new TimedValue<TValue>(addValue, expires), (k, v) =>
+            {
+                v.Value = updateValueFactory(k, v.Value);
+                return v;
+            });
             if (updateAccessTime) timedValue.UpdateAccessTime();
             return timedValue.Value;
         }
 
-        public TValue AddOrUpdate(TKey key, Func<TKey, TValue> addValueFactory, Func<TKey, TValue, TValue> updateValueFactory, bool updateAccessTime = true)
+        public TValue AddOrUpdate(TKey key, Func<TKey, TValue> addValueFactory,
+            Func<TKey, TValue, TValue> updateValueFactory, bool updateAccessTime = true)
         {
             return AddOrUpdate(key, addValueFactory, updateValueFactory, DefaultExpiry, updateAccessTime);
         }
 
-        public TValue AddOrUpdate(TKey key, Func<TKey, TValue> addValueFactory, Func<TKey, TValue, TValue> updateValueFactory, TimeSpan expires, bool updateAccessTime = true)
+        public TValue AddOrUpdate(TKey key, Func<TKey, TValue> addValueFactory,
+            Func<TKey, TValue, TValue> updateValueFactory, TimeSpan expires, bool updateAccessTime = true)
         {
-            var timedValue = _dict.AddOrUpdate(key, k => new TimedValue<TValue>(addValueFactory(k), expires), (k, v) => { v.Value = updateValueFactory(k, v.Value); return v; });
+            var timedValue = _dict.AddOrUpdate(key, k => new TimedValue<TValue>(addValueFactory(k), expires), (k, v) =>
+            {
+                v.Value = updateValueFactory(k, v.Value);
+                return v;
+            });
             if (updateAccessTime) timedValue.UpdateAccessTime();
             return timedValue.Value;
+        }
+
+        public bool ContainsKey(TKey key)
+        {
+            return _dict.ContainsKey(key);
+        }
+
+        public void Add(TKey key, TValue value)
+        {
+            if (!_dict.TryAdd(key, new TimedValue<TValue>(value, DefaultExpiry)))
+                throw new ArgumentException("Duplicate key");
+        }
+
+        public bool Remove(TKey key)
+        {
+            TimedValue<TValue> timedValue;
+            return _dict.TryRemove(key, out timedValue);
+        }
+
+        public bool TryGetValue(TKey key, out TValue value)
+        {
+            TimedValue<TValue> timedValue;
+            if (!_dict.TryGetValue(key, out timedValue))
+            {
+                value = default(TValue);
+                return false;
+            }
+
+            value = timedValue.Value;
+            return true;
         }
 
         public TValue this[TKey key]
@@ -262,5 +372,11 @@ namespace DediLib.Collections
             get { return _dict[key].Value; }
             set { _dict[key] = new TimedValue<TValue>(value, DefaultExpiry); }
         }
+
+        ICollection<TKey> IDictionary<TKey, TValue>.Keys => _dict.Keys;
+
+        public ICollection<TValue> Values
+            => new CollectionWrapper<TimedValue<TValue>, TValue>(_dict.Values, tv => tv.Value,
+                v => new TimedValue<TValue>(v, DefaultExpiry));
     }
 }

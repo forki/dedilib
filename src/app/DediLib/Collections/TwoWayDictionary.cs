@@ -15,6 +15,23 @@ namespace DediLib.Collections
             _reverseDict = new Dictionary<TValue, TKey>();
         }
 
+        public TwoWayDictionary(IEqualityComparer<TKey> keyComparer)
+            : base(keyComparer)
+        {
+            _reverseDict = new Dictionary<TValue, TKey>();
+        }
+
+        public TwoWayDictionary(IEqualityComparer<TValue> valueComparer)
+        {
+            _reverseDict = new Dictionary<TValue, TKey>(valueComparer);
+        }
+
+        public TwoWayDictionary(IEqualityComparer<TKey> keyComparer, IEqualityComparer<TValue> valueComparer)
+            : base(keyComparer)
+        {
+            _reverseDict = new Dictionary<TValue, TKey>(valueComparer);
+        }
+
         public TwoWayDictionary(IDictionary<TKey, TValue> dictionary)
             : base(dictionary)
         {
@@ -49,6 +66,19 @@ namespace DediLib.Collections
             }
         }
 
+        public void Set(TKey key, TValue value)
+        {
+            if (key == null) throw new ArgumentNullException(nameof(key));
+            if (value == null) throw new ArgumentNullException(nameof(value));
+
+            TValue previousValue;
+            if (TryGetValue(key, out previousValue))
+                _reverseDict.Remove(previousValue);
+
+            base[key] = value;
+            _reverseDict[value] = key;
+        }
+
         public new bool ContainsValue(TValue value)
         {
             return _reverseDict.ContainsKey(value);
@@ -65,7 +95,7 @@ namespace DediLib.Collections
 
         public bool TryGetKey(TValue value, out TKey key)
         {
-            return (_reverseDict.TryGetValue(value, out key));
+            return _reverseDict.TryGetValue(value, out key);
         }
 
         public TKey GetKey(TValue value)

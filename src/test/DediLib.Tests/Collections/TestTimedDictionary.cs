@@ -263,6 +263,14 @@ namespace DediLib.Tests.Collections
         }
 
         [Test]
+        public void Values_enumeration()
+        {
+            var timedDictionary = new TimedDictionary<string, object> {{"key", "value"}};
+
+            Assert.That(timedDictionary.Values, Is.EquivalentTo(new [] { "value" }));
+        }
+
+        [Test]
         public void TryRemove_not_existing_returns_false()
         {
             using (var timedDictionary = new TimedDictionary<string, object>())
