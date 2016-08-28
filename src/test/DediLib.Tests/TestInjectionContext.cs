@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Reflection;
 using NUnit.Framework;
 
 namespace DediLib.Tests
@@ -32,6 +33,38 @@ namespace DediLib.Tests
             {
                 context.Register<ITestInterface>(c => new TestClass());
                 Assert.IsInstanceOf<TestClass>(context.Get<ITestInterface>());
+            }
+        }
+
+        [Test]
+        public void IsRegistered_InterfaceNotRegistered_False()
+        {
+            using (var context = new InjectionContext())
+            {
+                Assert.That(context.IsRegistered<ITestInterface>(), Is.False);
+                Assert.That(context.IsRegistered(typeof(ITestInterface)), Is.False);
+            }
+        }
+
+        [Test]
+        public void IsRegistered_InterfaceRegistered_True()
+        {
+            using (var context = new InjectionContext())
+            {
+                context.Register<ITestInterface>(c => new TestClass());
+                Assert.That(context.IsRegistered<ITestInterface>(), Is.True);
+                Assert.That(context.IsRegistered(typeof(ITestInterface)), Is.True);
+            }
+        }
+
+        [Test]
+        public void IsRegistered_SingletonRegistered_True()
+        {
+            using (var context = new InjectionContext())
+            {
+                context.Singleton<ITestInterface>(c => new TestClass());
+                Assert.That(context.IsRegistered<ITestInterface>(), Is.True);
+                Assert.That(context.IsRegistered(typeof(ITestInterface)), Is.True);
             }
         }
 
@@ -359,6 +392,70 @@ namespace DediLib.Tests
         }
 
         public interface ITestInterface
+        {
+        }
+
+        [Test]
+        public void RegisterAllUniqueInterfaceImplementations_SingleInterfaceImplementationAlreadyRegistered_NotOverwritten()
+        {
+            var context = new InjectionContext();
+
+            context.Register<ISingleInterface>(c => (ISingleInterface) null);
+
+            context.RegisterAllUniqueInterfaceImplementations(false, Assembly.GetExecutingAssembly());
+
+            Assert.That(context.TryGet<ISingleInterface>(), Is.Null);
+        }
+
+        [Test]
+        public void RegisterAllUniqueInterfaceImplementations_SingleInterfaceImplementationAlreadyRegistered_Overwritten()
+        {
+            var context = new InjectionContext();
+
+            context.Register<ISingleInterface>(c => (ISingleInterface)null);
+
+            context.RegisterAllUniqueInterfaceImplementations(true, Assembly.GetExecutingAssembly());
+
+            Assert.That(context.TryGet<ISingleInterface>(), Is.InstanceOf<ISingleInterface>());
+        }
+
+        [Test]
+        public void RegisterAllUniqueInterfaceImplementations_SingleInterfaceImplementation_Registered()
+        {
+            var context = new InjectionContext();
+
+            context.RegisterAllUniqueInterfaceImplementations(true, Assembly.GetExecutingAssembly());
+
+            Assert.That(context.TryGet<ISingleInterface>(), Is.InstanceOf<ISingleInterface>());
+        }
+
+        [Test]
+        public void RegisterAllUniqueInterfaceImplementations_MultipleInterfaceImplementations_NotRegistered()
+        {
+            var context = new InjectionContext();
+
+            context.RegisterAllUniqueInterfaceImplementations(true, Assembly.GetExecutingAssembly());
+
+            Assert.That(context.TryGet<IMultipleInterface>(), Is.Null);
+        }
+
+        public interface ISingleInterface
+        {
+        }
+
+        public class SingleClass : ISingleInterface
+        {
+        }
+
+        public interface IMultipleInterface
+        {
+        }
+
+        public class MultipleClass1 : IMultipleInterface
+        {
+        }
+
+        public class MultipleClass2 : IMultipleInterface
         {
         }
     }
