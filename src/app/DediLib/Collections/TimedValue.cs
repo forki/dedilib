@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime;
 
 namespace DediLib.Collections
 {
@@ -16,6 +17,7 @@ namespace DediLib.Collections
             LastAccessUtc = DateTime.UtcNow;
         }
 
+        [TargetedPatchingOptOut("")]
         public void UpdateAccessTime()
         {
             LastAccessUtc = DateTime.UtcNow;

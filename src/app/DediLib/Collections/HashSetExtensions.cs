@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime;
 using System.Runtime.Serialization;
 using System.Text;
 
@@ -8,9 +9,10 @@ namespace DediLib.Collections
 {
     public static class HashSetExtensions
     {
+        [TargetedPatchingOptOut("")]
         public static HashSet<T> Clone<T>(this HashSet<T> original)
         {
-            if (original.Count < 60) return new HashSet<T>(original);
+            if (original.Count < 60) return new HashSet<T>(original, original.Comparer);
 
             var clone = (HashSet<T>)FormatterServices.GetUninitializedObject(typeof(HashSet<T>));
             Copy(Fields<T>.Comparer, original, clone);
@@ -59,10 +61,7 @@ namespace DediLib.Collections
                 return typeof(HashSet<T>).GetField(name, BindingFlags.Instance | BindingFlags.NonPublic);
             }
         }
-    }
 
-    public static class HashSetStringExtensions
-    {
         /// <summary>
         /// Checks if a delimited part is in the HashSet
         /// </summary>
@@ -81,15 +80,16 @@ namespace DediLib.Collections
         /// <param name="text"></param>
         /// <param name="delimiter"></param>
         /// <returns></returns>
+        [TargetedPatchingOptOut("")]
         public static bool ContainsSuffixFor(this HashSet<string> hashSet, string text, char delimiter)
         {
             if (string.IsNullOrEmpty(text)) return false;
 
             var sb = new StringBuilder();
-            string[] parts = text.Split(delimiter);
-            for (int i = parts.Length - 1; i >= 0; i--)
+            var parts = text.Split(delimiter);
+            for (var i = parts.Length - 1; i >= 0; i--)
             {
-                if (sb.Length > 0) sb.Insert(0, '.');
+                if (sb.Length > 0) sb.Insert(0, delimiter);
                 sb.Insert(0, parts[i]);
                 if (hashSet.Contains(sb.ToString())) return true;
             }

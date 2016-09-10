@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime;
 using DediLib.Collections;
 
 namespace DediLib
@@ -51,6 +52,7 @@ namespace DediLib
         {
         }
 
+        [TargetedPatchingOptOut("")]
         public T Get<T>() where T : class
         {
             object result;
@@ -73,6 +75,7 @@ namespace DediLib
             return (T)result;
         }
 
+        [TargetedPatchingOptOut("")]
         public object ResolveType(Type type)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
@@ -96,6 +99,7 @@ namespace DediLib
             return result;
         }
 
+        [TargetedPatchingOptOut("")]
         public T TryGet<T>() where T : class
         {
             var type = typeof (T);
@@ -107,6 +111,7 @@ namespace DediLib
             return (T)TryCreateFromConstructor(type);
         }
 
+        [TargetedPatchingOptOut("")]
         public object TryResolveType(Type type)
         {
             if (type == null) return null;
@@ -119,11 +124,13 @@ namespace DediLib
             return TryCreateFromConstructor(type);
         }
 
+        [TargetedPatchingOptOut("")]
         public bool IsRegistered<T>()
         {
             return _actions.ContainsKey(typeof(T));
         }
 
+        [TargetedPatchingOptOut("")]
         public bool IsRegistered(Type interfaceType)
         {
             return _actions.ContainsKey(interfaceType);
@@ -172,6 +179,7 @@ namespace DediLib
             return null;
         }
 
+        [TargetedPatchingOptOut("")]
         public void Register(Type type, Func<IInjectionContext, object> createFunc)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
@@ -184,6 +192,7 @@ namespace DediLib
             _actions[type] = createFunc;
         }
 
+        [TargetedPatchingOptOut("")]
         public void Register<T>(Func<IInjectionContext, T> createFunc) where T : class
         {
             if (createFunc == null) throw new ArgumentNullException(nameof(createFunc));
@@ -196,6 +205,7 @@ namespace DediLib
             _actions[typeof(T)] = registerAction;
         }
 
+        [TargetedPatchingOptOut("")]
         public void Register(Type interfaceType, Type instanceType)
         {
             if (!interfaceType.IsInterface)
@@ -210,6 +220,7 @@ namespace DediLib
             _actions[interfaceType] = registerAction;
         }
 
+        [TargetedPatchingOptOut("")]
         public void Register<TInterface, TInstance>() where TInterface : class where TInstance : class, TInterface
         {
             var constructorWithoutParams = typeof (TInstance).GetConstructors().FirstOrDefault(x => x.GetParameters().Length == 0);
@@ -222,6 +233,7 @@ namespace DediLib
             Register<TInterface>(c => c.Get<TInstance>());
         }
 
+        [TargetedPatchingOptOut("")]
         public void Singleton(Type type, Func<IInjectionContext, object> createFunc)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
@@ -235,6 +247,7 @@ namespace DediLib
             _actions[type] = c => singleton;
         }
 
+        [TargetedPatchingOptOut("")]
         public void Singleton<T>(Func<IInjectionContext, T> createFunc) where T : class
         {
             if (createFunc == null) throw new ArgumentNullException(nameof(createFunc));
@@ -247,6 +260,7 @@ namespace DediLib
             _actions[typeof(T)] = c => singleton;
         }
 
+        [TargetedPatchingOptOut("")]
         public void Singleton(Type interfaceType, Type instanceType)
         {
             if (!interfaceType.IsInterface)
@@ -261,11 +275,13 @@ namespace DediLib
             _actions[interfaceType] = c => singleton;
         }
 
+        [TargetedPatchingOptOut("")]
         public void Singleton<TInterface, TInstance>() where TInterface : class where TInstance : class, TInterface
         {
             Singleton<TInterface>(c => c.Get<TInstance>());
         }
 
+        [TargetedPatchingOptOut("")]
         public void RegisterAllUniqueInterfaceImplementations(bool overwriteExistingRegistrations = false, params Assembly[] assemblies)
         {
             if (assemblies == null || !assemblies.Any())
@@ -298,6 +314,7 @@ namespace DediLib
             }
         }
 
+        [TargetedPatchingOptOut("")]
         public IInjectionContext CreateScope()
         {
             return new InjectionContext(this);

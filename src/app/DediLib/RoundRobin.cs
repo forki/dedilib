@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime;
 
 namespace DediLib
 {
@@ -37,6 +38,7 @@ namespace DediLib
         }
 
         private readonly object _cycleLock = new object();
+        [TargetedPatchingOptOut("")]
         public void Cycle()
         {
             lock (_cycleLock)
@@ -48,6 +50,7 @@ namespace DediLib
             }
         }
 
+        [TargetedPatchingOptOut("")]
         public void Cycle(Action<T> onSelected)
         {
             if (onSelected == null)

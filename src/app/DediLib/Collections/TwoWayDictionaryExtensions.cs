@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime;
 
 namespace DediLib.Collections
 {
     public static class TwoWayDictionaryExtensions
     {
+        [TargetedPatchingOptOut("")]
         public static TwoWayDictionary<TKey, TValue> ToTwoWayDictionary<TKey, TValue, T>(this IEnumerable<T> enumerable, Func<T, TKey> keySelector, Func<T, TValue> valueSelector)
         {
             if (enumerable == null) throw new ArgumentNullException(nameof(enumerable));
@@ -19,6 +21,7 @@ namespace DediLib.Collections
             return result;
         }
 
+        [TargetedPatchingOptOut("")]
         public static TwoWayDictionary<TKey, TValue> ToTwoWayDictionary<TKey, TValue>(this IEnumerable<TValue> enumerable, Func<TValue, TKey> keySelector)
         {
             if (enumerable == null) throw new ArgumentNullException(nameof(enumerable));

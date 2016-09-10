@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime;
 using System.Threading;
 
 namespace DediLib
@@ -16,10 +17,7 @@ namespace DediLib
         /// <summary>
         /// Determines if signal is set (meaning CurrentValue >= signalGreaterOrEqual)
         /// </summary>
-        public bool IsSet
-        {
-            get { return _counterSignal.IsSet; }
-        }
+        public bool IsSet => _counterSignal.IsSet;
 
         /// <summary>
         /// Current counter value
@@ -48,6 +46,7 @@ namespace DediLib
         /// Add a value to counter
         /// </summary>
         /// <returns>new value after adding to the current value</returns>
+        [TargetedPatchingOptOut("")]
         public long Add(long value)
         {
             var newValue = Interlocked.Add(ref _counter, value);
@@ -60,6 +59,7 @@ namespace DediLib
         /// Increment counter value
         /// </summary>
         /// <returns>new value after incrementing the current value</returns>
+        [TargetedPatchingOptOut("")]
         public long Increment()
         {
             var newValue = Interlocked.Increment(ref _counter);
@@ -72,6 +72,7 @@ namespace DediLib
         /// Decrement counter value
         /// </summary>
         /// <returns>new value after decrementing the current value</returns>
+        [TargetedPatchingOptOut("")]
         public long Decrement()
         {
             var newValue = Interlocked.Decrement(ref _counter);
@@ -80,21 +81,25 @@ namespace DediLib
             return newValue;
         }
 
+        [TargetedPatchingOptOut("")]
         public bool Wait()
         {
             return Wait(TimeSpan.FromMilliseconds(-1));
         }
 
+        [TargetedPatchingOptOut("")]
         public bool Wait(TimeSpan timeout)
         {
             return _counterSignal.Wait(timeout);
         }
 
+        [TargetedPatchingOptOut("")]
         public void Wait(CancellationToken cancellationToken)
         {
             _counterSignal.Wait(cancellationToken);
         }
 
+        [TargetedPatchingOptOut("")]
         public bool Wait(TimeSpan timeout, CancellationToken cancellationToken)
         {
             return _counterSignal.Wait(timeout, cancellationToken);

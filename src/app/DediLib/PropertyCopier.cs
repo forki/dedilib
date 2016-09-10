@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime;
 
 namespace DediLib
 {
@@ -25,6 +26,7 @@ namespace DediLib
         /// <typeparam name="TTarget">Type of the target</typeparam>
         /// <param name="source">Source to copy properties from</param>
         /// <param name="target">Target to copy properties to</param>
+        [TargetedPatchingOptOut("")]
         public static void CopyFull<TSource, TTarget>(TSource source, TTarget target)
             where TSource : class
             where TTarget : class
@@ -43,6 +45,7 @@ namespace DediLib
         /// <typeparam name="TTarget">Type of the target</typeparam>
         /// <param name="source">Source to copy properties from</param>
         /// <param name="target">Target to copy properties to</param>
+        [TargetedPatchingOptOut("")]
         public static void CopyMatchingOnly<TSource, TTarget>(TSource source, TTarget target)
             where TSource : class
             where TTarget : class
@@ -63,6 +66,7 @@ namespace DediLib
         /// Tries to cast source to target and if not possible, copies all readable properties 
         /// from the source to a new instance of TTarget.
         /// </summary>
+        [TargetedPatchingOptOut("")]
         public static TTarget CastOrCopyFull<TSource>(TSource source) where TSource : class
         {
             var result = source as TTarget;
@@ -74,6 +78,7 @@ namespace DediLib
         /// Tries to cast source to target and if not possible, copies matching readable properties 
         /// from the source to a new instance of TTarget.
         /// </summary>
+        [TargetedPatchingOptOut("")]
         public static TTarget CastOrCopyMatching<TSource>(TSource source) where TSource : class
         {
             var result = source as TTarget;
@@ -85,6 +90,7 @@ namespace DediLib
         /// Copies all readable properties from the source to a new instance
         /// of TTarget.
         /// </summary>
+        [TargetedPatchingOptOut("")]
         public static TTarget CopyFull<TSource>(TSource source) where TSource : class
         {
             return PropertyCopier<TSource, TTarget>.CopyFull(source);
@@ -94,6 +100,7 @@ namespace DediLib
         /// Copies matching readable properties from the source to a new instance
         /// of TTarget.
         /// </summary>
+        [TargetedPatchingOptOut("")]
         public static TTarget CopyMatching<TSource>(TSource source) where TSource : class
         {
             return PropertyCopier<TSource, TTarget>.CopyMatching(source);

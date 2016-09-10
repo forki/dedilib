@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime;
 
 namespace DediLib.Collections
 {
@@ -11,6 +12,7 @@ namespace DediLib.Collections
         private readonly Func<TFrom, TTo> _translateFromTo;
         private readonly Func<TTo, TFrom> _translateToFrom;
 
+        [TargetedPatchingOptOut("")]
         public CollectionWrapper(ICollection<TFrom> underlyingCollection, Func<TFrom, TTo> translateFromTo, Func<TTo, TFrom> translateToFrom)
         {
             if (underlyingCollection == null) throw new ArgumentNullException(nameof(underlyingCollection));
@@ -22,31 +24,37 @@ namespace DediLib.Collections
             _translateToFrom = translateToFrom;
         }
 
+        [TargetedPatchingOptOut("")]
         public IEnumerator<TTo> GetEnumerator()
         {
             return _underlyingCollection.Select(x => _translateFromTo(x)).GetEnumerator();
         }
 
+        [TargetedPatchingOptOut("")]
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
 
+        [TargetedPatchingOptOut("")]
         public void Add(TTo item)
         {
             _underlyingCollection.Add(_translateToFrom(item));
         }
 
+        [TargetedPatchingOptOut("")]
         public void Clear()
         {
             _underlyingCollection.Clear();
         }
 
+        [TargetedPatchingOptOut("")]
         public bool Contains(TTo item)
         {
             return _underlyingCollection.Contains(_translateToFrom(item));
         }
 
+        [TargetedPatchingOptOut("")]
         public void CopyTo(TTo[] array, int arrayIndex)
         {
             var i = arrayIndex;
@@ -56,6 +64,7 @@ namespace DediLib.Collections
             }
         }
 
+        [TargetedPatchingOptOut("")]
         public bool Remove(TTo item)
         {
             return _underlyingCollection.Remove(_translateToFrom(item));

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Runtime;
 using System.Runtime.InteropServices;
 
 namespace DediLib.Imaging
@@ -59,6 +60,7 @@ namespace DediLib.Imaging
         /// </summary>
         /// <param name="width">image width</param>
         /// <param name="height">image height</param>
+        [TargetedPatchingOptOut("")]
         public FastImageArgb(int width, int height)
         {
             _buffer = new int[width * height];
@@ -71,6 +73,7 @@ namespace DediLib.Imaging
         /// </summary>
         /// <param name="image">image to be converted</param>
         /// <returns>ARGB image</returns>
+        [TargetedPatchingOptOut("")]
         public FastImageArgb(Image image)
             : this(new Bitmap(image))
         {
@@ -81,6 +84,7 @@ namespace DediLib.Imaging
         /// </summary>
         /// <param name="bitmap">bitmap to be converted</param>
         /// <returns>ARGB image</returns>
+        [TargetedPatchingOptOut("")]
         public FastImageArgb(Bitmap bitmap)
         {
             if (bitmap == null) throw new ArgumentNullException(nameof(bitmap));
@@ -114,6 +118,7 @@ namespace DediLib.Imaging
         /// </summary>
         /// <param name="argbValue">ARGB value</param>
         /// <returns>alpha value</returns>
+        [TargetedPatchingOptOut("")]
         public static byte GetAValue(int argbValue)
         {
             return (byte)(argbValue >> 24);
@@ -124,6 +129,7 @@ namespace DediLib.Imaging
         /// </summary>
         /// <param name="argbValue">ARGB value</param>
         /// <returns>blue value</returns>
+        [TargetedPatchingOptOut("")]
         public static byte GetBValue(int argbValue)
         {
             return (byte)(argbValue & 0x000000FF);
@@ -134,6 +140,7 @@ namespace DediLib.Imaging
         /// </summary>
         /// <param name="argbValue">ARGB value</param>
         /// <returns>green value</returns>
+        [TargetedPatchingOptOut("")]
         public static byte GetGValue(int argbValue)
         {
             return (byte)((argbValue & 0x0000FF00) >> 8);
@@ -144,6 +151,7 @@ namespace DediLib.Imaging
         /// </summary>
         /// <param name="argbValue">ARGB value</param>
         /// <returns>red value</returns>
+        [TargetedPatchingOptOut("")]
         public static byte GetRValue(int argbValue)
         {
             return (byte)((argbValue & 0x00FF0000) >> 16);
@@ -157,6 +165,7 @@ namespace DediLib.Imaging
         /// <param name="g">greeb vakue</param>
         /// <param name="b">blue value</param>
         /// <returns></returns>
+        [TargetedPatchingOptOut("")]
         public static int GetArgbValue(byte a, byte r, byte g, byte b)
         {
             return a << 24 | r << 16 | g << 8 | b;
@@ -166,6 +175,7 @@ namespace DediLib.Imaging
         /// Process complete image
         /// </summary>
         /// <param name="processPixelDelegate"></param>
+        [TargetedPatchingOptOut("")]
         public void Process(ProcessPixelDelegate processPixelDelegate)
         {
             var index = 0;
@@ -185,6 +195,7 @@ namespace DediLib.Imaging
         /// Creates a bitmap
         /// </summary>
         /// <returns>bitmap</returns>
+        [TargetedPatchingOptOut("")]
         public Bitmap ToBitmap()
         {
             var bitmap = new Bitmap(_width, _height, PixelFormat.Format32bppArgb);

@@ -1,4 +1,6 @@
-﻿namespace DediLib
+﻿using System.Runtime;
+
+namespace DediLib
 {
     public class Singleton<T> where T : class, new()
     {
@@ -16,6 +18,7 @@
         {
         }
 
+        [TargetedPatchingOptOut("")]
         public static void SetInstance(T instance)
         {
             _instance = instance;

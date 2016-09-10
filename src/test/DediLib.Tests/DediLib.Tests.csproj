@@ -50,9 +50,19 @@
     <Compile Include="..\..\app\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="Collections\TestListDictionary.cs" />
-    <Compile Include="Collections\TestHashSetDictionary.cs" />
-    <Compile Include="Collections\TestHashSetStringExtensions.cs" />
+    <Compile Include="Collections\EnumerableExtensions_When_calling_toListAsync.cs" />
+    <Compile Include="Collections\HashSetStringExtensions_When_clone.cs" />
+    <Compile Include="Collections\ListDictionary_When_add.cs" />
+    <Compile Include="Collections\ListDictionary_When_addMany.cs" />
+    <Compile Include="Collections\ListDictionary_When_benchmarking.cs" />
+    <Compile Include="Collections\HashSetDictionary_When_benchmarking.cs" />
+    <Compile Include="Collections\ListDictionary_When_empty.cs" />
+    <Compile Include="Collections\ListDictionary_When_remove.cs" />
+    <Compile Include="Collections\HashSetDictionary_When_remove.cs" />
+    <Compile Include="Collections\HashSetDictionary_When_empty.cs" />
+    <Compile Include="Collections\HashSetDictionary_When_addMany.cs" />
+    <Compile Include="Collections\HashSetDictionary_When_add.cs" />
+    <Compile Include="Collections\HashSetStringExtensions_When_containsSuffixFor.cs" />
     <Compile Include="Collections\TestNoDuplicateList.cs" />
     <Compile Include="Collections\TestTimedDictionary.cs" />
     <Compile Include="Collections\TestTimeSeriesLookupList.cs" />

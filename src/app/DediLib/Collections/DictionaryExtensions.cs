@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Runtime;
 
 namespace DediLib.Collections
 {
     public static class DictionaryExtensions
     {
+        [TargetedPatchingOptOut("")]
         public static TValue GetOrAdd<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, Func<TKey, TValue> createFunc)
         {
             if (dictionary == null) throw new ArgumentNullException(nameof(dictionary));
@@ -21,6 +23,7 @@ namespace DediLib.Collections
             return result;
         }
 
+        [TargetedPatchingOptOut("")]
         public static TValue TryGet<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
             where TValue : class
         {
@@ -34,6 +37,7 @@ namespace DediLib.Collections
             return null;
         }
 
+        [TargetedPatchingOptOut("")]
         public static bool TryRemove<TKey, TValue>(this ConcurrentDictionary<TKey, TValue> dictionary, TKey key)
         {
             TValue dummy;

@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.IO;
 using System.Linq;
+using System.Runtime;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 
@@ -24,6 +25,7 @@ namespace DediLib.Imaging
         /// <param name="thumbnailHeight">Thumbnail height</param>
         /// <param name="cropImage">Crops the image to keep the aspect ratio</param>
         /// <returns></returns>
+        [TargetedPatchingOptOut("")]
         public static Image CreateThumbnail(Image image, int thumbnailWidth, int thumbnailHeight, bool cropImage)
         {
             var newWidth = thumbnailWidth;
@@ -93,6 +95,7 @@ namespace DediLib.Imaging
         /// <exception cref="ArgumentOutOfRangeException">
         /// Bottom Y value must be greater than top Y value
         /// </exception>
+        [TargetedPatchingOptOut("")]
         public static Bitmap CropImage(Image source, int x1, int y1, int x2, int y2)
         {
             if ((x1 < 0) || (x1 > source.Width)) throw new ArgumentOutOfRangeException(nameof(x1));
@@ -143,6 +146,7 @@ namespace DediLib.Imaging
         /// <param name="image">Image to determine the hash of</param>
         /// <returns>Long hash value</returns>
         /// <exception cref="ArgumentNullException">image</exception>
+        [TargetedPatchingOptOut("")]
         public static ulong GetImagePixelHashLong(Image image)
         {
             var hash = GetImagePixelHashSha1(image);
@@ -157,15 +161,16 @@ namespace DediLib.Imaging
         /// <param name="image">Image to determine the hash of</param>
         /// <returns>Hash value</returns>
         /// <exception cref="ArgumentNullException">image</exception>
+        [TargetedPatchingOptOut("")]
         public static byte[] GetImagePixelHashSha1(Image image)
         {
             if (image == null) throw new ArgumentNullException(nameof(image));
 
             byte[] hash;
-            SHA1 sha1 = SHA1.Create("SHA1");
+            var sha1 = SHA1.Create();
 
-            int width = image.Width;
-            int height = image.Height;
+            var width = image.Width;
+            var height = image.Height;
             var bmpSource = new Bitmap(image);
             BitmapData bdSource = null;
             var mem = new MemoryStream();
@@ -201,6 +206,7 @@ namespace DediLib.Imaging
         /// <param name="watermarkText">watermark text</param>
         /// <param name="fontFamily">font family</param>
         /// <param name="fontSize">font size</param>
+        [TargetedPatchingOptOut("")]
         public static void EmbedWatermarkText(Image image, string watermarkText, string fontFamily, int fontSize)
         {
             if (string.IsNullOrEmpty(watermarkText)) return;
@@ -230,6 +236,7 @@ namespace DediLib.Imaging
         /// </summary>
         /// <param name="source">Source image</param>
         /// <returns></returns>
+        [TargetedPatchingOptOut("")]
         public static Rectangle FindBorderContentArea(Image source)
         {
             var width = source.Width;
@@ -446,6 +453,7 @@ namespace DediLib.Imaging
         /// <param name="image">image</param>
         /// <param name="stream">stream to write to</param>
         /// <param name="quality">JPEG quality (0 to 100)</param>
+        [TargetedPatchingOptOut("")]
         public static void SaveAsJpeg(this Image image, Stream stream, int quality)
         {
             var pair = PrepareJpegEncoderQuality(quality);
@@ -459,6 +467,7 @@ namespace DediLib.Imaging
         /// <param name="bitmap">bitmap</param>
         /// <param name="fileName">file name</param>
         /// <param name="quality">JPEG quality (0 to 100)</param>
+        [TargetedPatchingOptOut("")]
         public static void SaveAsJpeg(this Bitmap bitmap, string fileName, int quality)
         {
             var pair = PrepareJpegEncoderQuality(quality);
@@ -472,6 +481,7 @@ namespace DediLib.Imaging
         /// <param name="bitmap">bitmap</param>
         /// <param name="stream">stream to write to</param>
         /// <param name="quality">JPEG quality (0 to 100)</param>
+        [TargetedPatchingOptOut("")]
         public static void SaveAsJpeg(this Bitmap bitmap, Stream stream, int quality)
         {
             var pair = PrepareJpegEncoderQuality(quality);
@@ -485,6 +495,7 @@ namespace DediLib.Imaging
         /// <param name="image">image</param>
         /// <param name="quality">JPEG quality (0 to 100)</param>
         /// <returns>array of image data</returns>
+        [TargetedPatchingOptOut("")]
         public static byte[] SaveAsJpeg(this Image image, int quality)
         {
             var pair = PrepareJpegEncoderQuality(quality);
@@ -505,6 +516,7 @@ namespace DediLib.Imaging
         /// <param name="bitmap">bitmap</param>
         /// <param name="quality">JPEG quality (0 to 100)</param>
         /// <returns>array of image data</returns>
+        [TargetedPatchingOptOut("")]
         public static byte[] SaveAsJpeg(this Bitmap bitmap, int quality)
         {
             var pair = PrepareJpegEncoderQuality(quality);
@@ -522,6 +534,7 @@ namespace DediLib.Imaging
         /// <summary>
         /// Returns the image codec with the given mime type
         /// </summary>
+        [TargetedPatchingOptOut("")]
         public static ImageCodecInfo GetEncoderInfo(string mimeType)
         {
             // Get image codecs for all image formats

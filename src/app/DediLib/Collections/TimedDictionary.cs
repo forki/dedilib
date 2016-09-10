@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime;
 
 namespace DediLib.Collections
 {
@@ -14,17 +15,20 @@ namespace DediLib.Collections
 
         public TimeSpan DefaultExpiry { get; set; }
 
+        [TargetedPatchingOptOut("")]
         public void Add(KeyValuePair<TKey, TValue> item)
         {
             if (!_dict.TryAdd(item.Key, new TimedValue<TValue>(item.Value, DefaultExpiry)))
                 throw new ArgumentException("Duplicate key");
         }
 
+        [TargetedPatchingOptOut("")]
         public void Clear()
         {
             _dict.Clear();
         }
 
+        [TargetedPatchingOptOut("")]
         public bool Contains(KeyValuePair<TKey, TValue> item)
         {
             TimedValue<TValue> timedValue;
@@ -34,6 +38,7 @@ namespace DediLib.Collections
             return Equals(item.Value, timedValue.Value);
         }
 
+        [TargetedPatchingOptOut("")]
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
         {
             var i = arrayIndex;
@@ -43,6 +48,7 @@ namespace DediLib.Collections
             }
         }
 
+        [TargetedPatchingOptOut("")]
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
             TimedValue<TValue> timedValue;
@@ -101,6 +107,7 @@ namespace DediLib.Collections
 
         #endregion
 
+        [TargetedPatchingOptOut("")]
         public TimedDictionary()
         {
             _dict = new ConcurrentDictionary<TKey, TimedValue<TValue>>();
@@ -109,6 +116,7 @@ namespace DediLib.Collections
             TimedDictionaryWorker.Register(this);
         }
 
+        [TargetedPatchingOptOut("")]
         public TimedDictionary(TimeSpan defaultExpiry)
         {
             _dict = new ConcurrentDictionary<TKey, TimedValue<TValue>>();
@@ -116,6 +124,7 @@ namespace DediLib.Collections
             Initialize(defaultExpiry);
         }
 
+        [TargetedPatchingOptOut("")]
         public TimedDictionary(TimeSpan defaultExpiry, TimeSpan cleanUpPeriod)
         {
             _dict = new ConcurrentDictionary<TKey, TimedValue<TValue>>();
@@ -123,6 +132,7 @@ namespace DediLib.Collections
             Initialize(defaultExpiry, cleanUpPeriod);
         }
 
+        [TargetedPatchingOptOut("")]
         public TimedDictionary(int concurrencyLevel, int capacity)
         {
             _dict = new ConcurrentDictionary<TKey, TimedValue<TValue>>(concurrencyLevel, capacity);
@@ -130,6 +140,7 @@ namespace DediLib.Collections
             Initialize(_overrideDefaultExpiry);
         }
 
+        [TargetedPatchingOptOut("")]
         public TimedDictionary(TimeSpan defaultExpiry, int concurrencyLevel, int capacity)
         {
             _dict = new ConcurrentDictionary<TKey, TimedValue<TValue>>(concurrencyLevel, capacity);
@@ -137,6 +148,7 @@ namespace DediLib.Collections
             Initialize(defaultExpiry);
         }
 
+        [TargetedPatchingOptOut("")]
         public TimedDictionary(int concurrencyLevel, int capacity, IEqualityComparer<TKey> comparer)
         {
             _dict = new ConcurrentDictionary<TKey, TimedValue<TValue>>(concurrencyLevel, capacity, comparer);
@@ -144,6 +156,7 @@ namespace DediLib.Collections
             Initialize(TimeSpan.FromMilliseconds(-1));
         }
 
+        [TargetedPatchingOptOut("")]
         public TimedDictionary(TimeSpan defaultExpiry, int concurrencyLevel, int capacity,
             IEqualityComparer<TKey> comparer)
         {
@@ -152,6 +165,7 @@ namespace DediLib.Collections
             Initialize(defaultExpiry);
         }
 
+        [TargetedPatchingOptOut("")]
         public TimedDictionary(TimeSpan defaultExpiry, IEnumerable<KeyValuePair<TKey, TValue>> collection)
         {
             _dict =
@@ -164,6 +178,7 @@ namespace DediLib.Collections
             Initialize(defaultExpiry);
         }
 
+        [TargetedPatchingOptOut("")]
         public TimedDictionary(TimeSpan defaultExpiry, IEnumerable<KeyValuePair<TKey, TValue>> collection,
             IEqualityComparer<TKey> comparer)
         {
@@ -177,6 +192,7 @@ namespace DediLib.Collections
             Initialize(defaultExpiry);
         }
 
+        [TargetedPatchingOptOut("")]
         public TimedDictionary(TimeSpan defaultExpiry, int concurrencyLevel,
             IEnumerable<KeyValuePair<TKey, TValue>> collection, IEqualityComparer<TKey> comparer)
         {
@@ -189,6 +205,7 @@ namespace DediLib.Collections
             Initialize(defaultExpiry);
         }
 
+        [TargetedPatchingOptOut("")]
         private void Initialize(TimeSpan defaultExpiry)
         {
             var cleanUpPeriod =
@@ -202,6 +219,7 @@ namespace DediLib.Collections
             Initialize(defaultExpiry, cleanUpPeriod);
         }
 
+        [TargetedPatchingOptOut("")]
         private void Initialize(TimeSpan defaultExpiry, TimeSpan cleanUpPeriod)
         {
             CleanUpPeriod = cleanUpPeriod;
@@ -211,6 +229,7 @@ namespace DediLib.Collections
 
         private readonly object _cleanUpLock = new object();
 
+        [TargetedPatchingOptOut("")]
         public void CleanUp()
         {
             lock (_cleanUpLock)
@@ -221,22 +240,26 @@ namespace DediLib.Collections
             }
         }
 
+        [TargetedPatchingOptOut("")]
         public bool TryAdd(TKey key, TValue value)
         {
             return TryAdd(key, value, DefaultExpiry);
         }
 
+        [TargetedPatchingOptOut("")]
         public bool TryAdd(TKey key, TValue value, TimeSpan expires)
         {
             return _dict.TryAdd(key, new TimedValue<TValue>(value, expires));
         }
 
+        [TargetedPatchingOptOut("")]
         public bool TryRemove(TKey key)
         {
             TValue value;
             return TryRemove(key, out value);
         }
 
+        [TargetedPatchingOptOut("")]
         public bool TryRemove(TKey key, out TValue value)
         {
             TimedValue<TValue> timedValue;
@@ -249,6 +272,7 @@ namespace DediLib.Collections
             return true;
         }
 
+        [TargetedPatchingOptOut("")]
         public bool TryGetValue(TKey key, out TValue value, bool updateAccessTime = true)
         {
             TimedValue<TValue> timedValue;
@@ -263,6 +287,7 @@ namespace DediLib.Collections
             return true;
         }
 
+        [TargetedPatchingOptOut("")]
         public bool TryGetValue(TKey key, out TimedValue<TValue> value, bool updateAccessTime = true)
         {
             TimedValue<TValue> timedValue;
@@ -277,11 +302,13 @@ namespace DediLib.Collections
             return true;
         }
 
+        [TargetedPatchingOptOut("")]
         public TValue GetOrAdd(TKey key, Func<TKey, TValue> valueFactory, bool updateAccessTime = true)
         {
             return GetOrAdd(key, valueFactory, DefaultExpiry, updateAccessTime);
         }
 
+        [TargetedPatchingOptOut("")]
         public TValue GetOrAdd(TKey key, Func<TKey, TValue> valueFactory, TimeSpan expires, bool updateAccessTime = true)
         {
             var timedValue = _dict.GetOrAdd(key, k => new TimedValue<TValue>(valueFactory(k), expires));
@@ -289,11 +316,13 @@ namespace DediLib.Collections
             return timedValue.Value;
         }
 
+        [TargetedPatchingOptOut("")]
         public TValue GetOrAdd(TKey key, TValue value, bool updateAccessTime = true)
         {
             return GetOrAdd(key, value, DefaultExpiry, updateAccessTime);
         }
 
+        [TargetedPatchingOptOut("")]
         public TValue GetOrAdd(TKey key, TValue value, TimeSpan expires, bool updateAccessTime = true)
         {
             var timedValue = _dict.GetOrAdd(key, new TimedValue<TValue>(value, expires));
@@ -301,12 +330,14 @@ namespace DediLib.Collections
             return timedValue.Value;
         }
 
+        [TargetedPatchingOptOut("")]
         public TValue AddOrUpdate(TKey key, TValue addValue, Func<TKey, TValue, TValue> updateValueFactory,
             bool updateAccessTime = true)
         {
             return AddOrUpdate(key, addValue, updateValueFactory, DefaultExpiry, updateAccessTime);
         }
 
+        [TargetedPatchingOptOut("")]
         public TValue AddOrUpdate(TKey key, TValue addValue, Func<TKey, TValue, TValue> updateValueFactory,
             TimeSpan expires, bool updateAccessTime = true)
         {
@@ -319,12 +350,14 @@ namespace DediLib.Collections
             return timedValue.Value;
         }
 
+        [TargetedPatchingOptOut("")]
         public TValue AddOrUpdate(TKey key, Func<TKey, TValue> addValueFactory,
             Func<TKey, TValue, TValue> updateValueFactory, bool updateAccessTime = true)
         {
             return AddOrUpdate(key, addValueFactory, updateValueFactory, DefaultExpiry, updateAccessTime);
         }
 
+        [TargetedPatchingOptOut("")]
         public TValue AddOrUpdate(TKey key, Func<TKey, TValue> addValueFactory,
             Func<TKey, TValue, TValue> updateValueFactory, TimeSpan expires, bool updateAccessTime = true)
         {
@@ -337,23 +370,27 @@ namespace DediLib.Collections
             return timedValue.Value;
         }
 
+        [TargetedPatchingOptOut("")]
         public bool ContainsKey(TKey key)
         {
             return _dict.ContainsKey(key);
         }
 
+        [TargetedPatchingOptOut("")]
         public void Add(TKey key, TValue value)
         {
             if (!_dict.TryAdd(key, new TimedValue<TValue>(value, DefaultExpiry)))
                 throw new ArgumentException("Duplicate key");
         }
 
+        [TargetedPatchingOptOut("")]
         public bool Remove(TKey key)
         {
             TimedValue<TValue> timedValue;
             return _dict.TryRemove(key, out timedValue);
         }
 
+        [TargetedPatchingOptOut("")]
         public bool TryGetValue(TKey key, out TValue value)
         {
             TimedValue<TValue> timedValue;

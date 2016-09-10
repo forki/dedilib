@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime;
 
 namespace DediLib.Collections
 {
@@ -66,6 +67,7 @@ namespace DediLib.Collections
 
         private static readonly T[] Empty = new T[0];
 
+        [TargetedPatchingOptOut("")]
         public IList<T> GetBetween(DateTime fromInclusiveTimestamp, DateTime toExclusiveTimestamp)
         {
             if (fromInclusiveTimestamp >= toExclusiveTimestamp) return Empty;
@@ -105,11 +107,13 @@ namespace DediLib.Collections
 
         public T this[int index] => _list[index];
 
+        [TargetedPatchingOptOut("")]
         public IEnumerator<T> GetEnumerator()
         {
             return _list.GetEnumerator();
         }
 
+        [TargetedPatchingOptOut("")]
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

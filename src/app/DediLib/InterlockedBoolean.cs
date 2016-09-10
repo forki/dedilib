@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Runtime;
+using System.Threading;
 
 namespace DediLib
 {
@@ -11,10 +12,7 @@ namespace DediLib
         /// <summary>
         /// Current value
         /// </summary>
-        public bool Value
-        {
-            get { return _value == 1; }
-        }
+        public bool Value => _value == 1;
 
         /// <summary>
         /// Constructor
@@ -30,6 +28,7 @@ namespace DediLib
         /// </summary>
         /// <param name="newValue">new value</param>
         /// <returns>the original value before any operation was performed</returns>
+        [TargetedPatchingOptOut("")]
         public bool Set(bool newValue)
         {
             var oldValue = Interlocked.Exchange(ref _value, newValue ? 1 : 0);
@@ -43,6 +42,7 @@ namespace DediLib
         /// <param name="newValue">new value</param>
         /// <param name="comparand">value to compare the current value with</param>
         /// <returns>the original value before any operation was performed</returns>
+        [TargetedPatchingOptOut("")]
         public bool CompareExchange(bool newValue, bool comparand)
         {
             var oldValue = Interlocked.CompareExchange(ref _value, newValue ? 1 : 0, comparand ? 1 : 0);

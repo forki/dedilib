@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime;
 
@@ -33,6 +34,7 @@ namespace DediLib.Collections
         /// <summary>
         /// Constructor
         /// </summary>
+        [TargetedPatchingOptOut("")]
         public HashSetDictionary()
             : this(100)
         {
@@ -42,6 +44,7 @@ namespace DediLib.Collections
         /// Constructor
         /// </summary>
         /// <param name="capacity">initial capacity</param>
+        [TargetedPatchingOptOut("")]
         public HashSetDictionary(int capacity)
         {
             _singleItems = new Dictionary<TKey, TValue>(capacity);
@@ -56,6 +59,7 @@ namespace DediLib.Collections
         /// </summary>
         /// <param name="capacity">initial capacity</param>
         /// <param name="keyComparer">key comparer</param>
+        [TargetedPatchingOptOut("")]
         public HashSetDictionary(int capacity, IEqualityComparer<TKey> keyComparer)
         {
             if (keyComparer == null) throw new ArgumentNullException(nameof(keyComparer));
@@ -65,6 +69,22 @@ namespace DediLib.Collections
 
             _allKeys = new List<TKey>(capacity);
             _allValues = new List<TValue>(capacity);
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="keyComparer">key comparer</param>
+        [TargetedPatchingOptOut("")]
+        public HashSetDictionary(IEqualityComparer<TKey> keyComparer)
+        {
+            if (keyComparer == null) throw new ArgumentNullException(nameof(keyComparer));
+
+            _singleItems = new Dictionary<TKey, TValue>(keyComparer);
+            _multiItems = new Dictionary<TKey, HashSet<TValue>>(keyComparer);
+
+            _allKeys = new List<TKey>();
+            _allValues = new List<TValue>();
         }
 
         /// <summary>
@@ -85,6 +105,25 @@ namespace DediLib.Collections
 
             _allKeys = new List<TKey>(capacity);
             _allValues = new List<TValue>(capacity);
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="keyComparer">key comparer</param>
+        /// <param name="valueComparer">value comparer</param>
+        public HashSetDictionary(IEqualityComparer<TKey> keyComparer, IEqualityComparer<TValue> valueComparer)
+        {
+            if (keyComparer == null) throw new ArgumentNullException(nameof(keyComparer));
+            if (valueComparer == null) throw new ArgumentNullException(nameof(valueComparer));
+
+            _valueComparer = valueComparer;
+
+            _singleItems = new Dictionary<TKey, TValue>(keyComparer);
+            _multiItems = new Dictionary<TKey, HashSet<TValue>>(keyComparer);
+
+            _allKeys = new List<TKey>();
+            _allValues = new List<TValue>();
         }
 
         /// <summary>
@@ -227,6 +266,44 @@ namespace DediLib.Collections
         }
 
         /// <summary>
+        /// Remove a key and value
+        /// </summary>
+        /// <param name="key">key</param>
+        /// <param name="value">value</param>
+        /// <returns>true, if key/value pair has been removed</returns>
+        [TargetedPatchingOptOut("")]
+        public bool Remove(TKey key, TValue value)
+        {
+            TValue existingItem;
+            bool removed;
+
+            if (!_singleItems.TryGetValue(key, out existingItem))
+            {
+                HashSet<TValue> existingList;
+                if (!_multiItems.TryGetValue(key, out existingList)) return false; // item not found
+
+                removed = existingList.Remove(value);
+                if (!removed) return false;
+
+                if (_valuesCount >= 0) _valuesCount--;
+                if (existingList.Count != 1) return true;
+
+                // convert multi item to single item
+                _singleItems[key] = existingList.First();
+                _multiItems.Remove(key);
+                _updateValuesList = true; // values list is to be updated
+                return true;
+            }
+
+            // check if single value matches the value to be removed)
+            if (!_valueComparer.Equals(existingItem, value)) return false;
+
+            removed = _singleItems.Remove(key);
+            if (removed && _valuesCount >= 0) _valuesCount--;
+            return removed;
+        }
+
+        /// <summary>
         /// Remove a key/value pair
         /// </summary>
         /// <param name="item">key/value pair</param>
@@ -234,33 +311,7 @@ namespace DediLib.Collections
         [TargetedPatchingOptOut("")]
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
-            TValue existingItem;
-            bool removed;
-
-            if (!_singleItems.TryGetValue(item.Key, out existingItem))
-            {
-                HashSet<TValue> existingList;
-                if (!_multiItems.TryGetValue(item.Key, out existingList)) return false; // item not found
-
-                removed = existingList.Remove(item.Value);
-                if (!removed) return false;
-
-                if (_valuesCount >= 0) _valuesCount--;
-                if (existingList.Count != 1) return true;
-
-                // convert multi item to single item
-                _singleItems[item.Key] = existingList.First();
-                _multiItems.Remove(item.Key);
-                _updateValuesList = true; // values list is to be updated
-                return true;
-            }
-
-            // check if single value matches the value to be removed)
-            if (!_singleItems.Contains(item)) return false;
-
-            removed = _singleItems.Remove(item.Key);
-            if (removed && _valuesCount >= 0) _valuesCount--;
-            return removed;
+            return Remove(item.Key, item.Value);
         }
 
         /// <summary>
@@ -299,7 +350,7 @@ namespace DediLib.Collections
             get
             {
                 if (_updateKeysList) UpdateAllKeys();
-                return _allKeys;
+                return new ReadOnlyCollection<TKey>(_allKeys);
             }
         }
 
@@ -342,7 +393,7 @@ namespace DediLib.Collections
             get
             {
                 if (_updateValuesList) UpdateAllValues();
-                return _allValues;
+                return new ReadOnlyCollection<TValue>(_allValues);
             }
         }
 
