@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Net;
 using System.Numerics;
 
@@ -40,7 +39,7 @@ namespace DediLib.Net
             var broadcastAddress = new byte[addressBytes.Length];
             for (var i = 0; i < broadcastAddress.Length; i++)
             {
-                broadcastAddress[i] = (byte)(addressBytes[i] & (subnetMaskBytes[i]));
+                broadcastAddress[i] = (byte)(addressBytes[i] & subnetMaskBytes[i]);
             }
             return new IPAddress(broadcastAddress);
         }
@@ -70,15 +69,14 @@ namespace DediLib.Net
             const byte maskLength = 128;
             if (cidr > maskLength) throw new ArgumentOutOfRangeException(nameof(cidr), cidr, "CIDR network prefix cannot be larger than 128 for IPv6");
 
-            var maskBits = new BitArray(maskLength);
+            var bMaskData = new byte[maskLength / 8];
             for (byte i = 0; i < maskLength; i++)
             {
-                var index = (((maskLength - 1) - i) / 8) * 8 + (i % 8);
-                maskBits.Set(index, i >= (maskLength - cidr));
+                var index = (maskLength - 1 - i) / 8 * 8 + i % 8;
+                var bitValue = i >= maskLength - cidr ? (byte)1 : (byte)0;
+                bMaskData[index / 8] |= (byte)(bitValue << (i%8));
             }
 
-            var bMaskData = new byte[maskLength / 8];
-            maskBits.CopyTo(bMaskData, 0);
             return new IPAddress(bMaskData);
         }
 

@@ -5,8 +5,6 @@ namespace DediLib.Net
 {
     public class IPAddressComparer : IComparer<IPAddress>
     {
-        public static readonly IPAddressComparer Static = new IPAddressComparer();
-
         public int Compare(IPAddress ip1, IPAddress ip2)
         {
             if (ip1 == null && ip2 == null) return 0;

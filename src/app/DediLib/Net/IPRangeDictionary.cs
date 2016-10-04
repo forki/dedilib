@@ -178,10 +178,9 @@ namespace DediLib.Net
         {
             if (ipAddress == null) throw new ArgumentNullException(nameof(ipAddress));
 
-            if (!ipAddress.AddressFamily.HasFlag(AddressFamily.InterNetworkV6))
-                return TryGetValueIpv4(ipAddress, out value);
-
-            return TryGetValueIpv6(ipAddress, out value);
+            return ipAddress.AddressFamily.HasFlag(AddressFamily.InterNetworkV6)
+                ? TryGetValueIpv6(ipAddress, out value)
+                : TryGetValueIpv4(ipAddress, out value);
         }
 
         private bool TryGetValueIpv4(IPAddress ipAddress, out T value)
@@ -192,22 +191,32 @@ namespace DediLib.Net
             var number = (uint)IPAddress.NetworkToHostOrder(BitConverter.ToInt32(bytes, 0));
 
             var keys = Ipv4Keys;
-            int index = keys.BinarySearch(number);
+            var index = keys.BinarySearch(number);
 
             if (index < 0) index = Math.Abs(index) - 2;
 
             if (index >= 0 && index < keys.Count)
             {
+                ulong key;
+                try
+                {
+                    key = keys[index];
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    value = default(T);
+                    return false;
+                }
+
                 SortedList<ulong, T> subDict;
-                if (_dictIpv4.TryGetValue(keys[index], out subDict))
+                if (_dictIpv4.TryGetValue(key, out subDict))
                 {
                     foreach (var pair in subDict)
                     {
-                        if (number <= pair.Key)
-                        {
-                            value = pair.Value;
-                            return true;
-                        }
+                        if (number > pair.Key) continue;
+
+                        value = pair.Value;
+                        return true;
                     }
                 }
             }
@@ -223,22 +232,32 @@ namespace DediLib.Net
             var number = IPAddressHelper.BigIntegerFromIpAddress(ipAddress);
 
             var keys = Ipv6Keys;
-            int index = keys.BinarySearch(number);
+            var index = keys.BinarySearch(number);
 
             if (index < 0) index = Math.Abs(index) - 2;
 
             if (index >= 0 && index < keys.Count)
             {
+                BigInteger key;
+                try
+                {
+                    key = keys[index];
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    value = default(T);
+                    return false;
+                }
+
                 SortedList<BigInteger, T> subDict;
-                if (_dictIpv6.TryGetValue(keys[index], out subDict))
+                if (_dictIpv6.TryGetValue(key, out subDict))
                 {
                     foreach (var pair in subDict)
                     {
-                        if (number <= pair.Key)
-                        {
-                            value = pair.Value;
-                            return true;
-                        }
+                        if (number > pair.Key) continue;
+
+                        value = pair.Value;
+                        return true;
                     }
                 }
             }

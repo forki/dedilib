@@ -7,9 +7,10 @@ using System.Numerics;
 namespace DediLib.Net
 {
     [DebuggerDisplay("{From} - {To}")]
-    [Serializable]
     public class IPRange : IEquatable<IPRange>
     {
+        private static readonly IPAddressComparer IpAddressComparer = new IPAddressComparer();
+
         public IPAddress From { get; set; }
         public IPAddress To { get; set; }
 
@@ -20,8 +21,15 @@ namespace DediLib.Net
                 var fromBytes = From.GetAddressBytes();
                 var toBytes = To.GetAddressBytes();
 
-                if (From.AddressFamily != AddressFamily.InterNetwork)
-                    throw new InvalidOperationException("Count only works for IPv4 addresses, use BigCount property for IPv6");
+                if (From.AddressFamily == AddressFamily.InterNetworkV6)
+                {
+                    var bigCount = BigCount;
+                    if (bigCount < ulong.MaxValue)
+                        return (ulong)bigCount;
+
+                    throw new InvalidOperationException(
+                        "Count is too big for IPv6 addresses, use BigCount property instead");
+                }
 
 #pragma warning disable 612,618
                 var fromNumber = (uint)IPAddress.NetworkToHostOrder(BitConverter.ToInt32(fromBytes, 0));
@@ -45,7 +53,7 @@ namespace DediLib.Net
 
         public IPRange(IPAddress from, IPAddress to)
         {
-            if (IPAddressComparer.Static.Compare(from, to) <= 0)
+            if (IpAddressComparer.Compare(from, to) <= 0)
             {
                 From = from;
                 To = to;
@@ -67,9 +75,9 @@ namespace DediLib.Net
 
             var network = From + "/" + (bitsPerIp - bitsInRange);
 
-            var checkRegion = IPRange.Parse(network);
+            var checkRegion = Parse(network);
             if (!checkRegion.From.Equals(From) || !checkRegion.To.Equals(To))
-                throw new InvalidOperationException(String.Format("Could not determine network for IP range {0} to {1}", From, To));
+                throw new InvalidOperationException(string.Format("Could not determine network for IP range {0} to {1}", From, To));
 
             return network;
         }
@@ -116,7 +124,7 @@ namespace DediLib.Net
             var pos = network.IndexOf('/');
             if (pos < 0)
             {
-                exception = new ArgumentException("Expected CIDR notation is missing network (correct example would be \"129.168.1.0/24\")", nameof(network));
+                exception = new ArgumentException("Expected CIDR notation is missing network (correct example would be \"192.168.1.0/24\")", nameof(network));
                 return false;
             }
 
@@ -128,13 +136,16 @@ namespace DediLib.Net
             }
 
             byte cidr;
-            if (!Byte.TryParse(network.Substring(pos + 1), out cidr))
+            if (!byte.TryParse(network.Substring(pos + 1), out cidr))
             {
                 exception = new ArgumentException("Cannot parse CIDR part of IP address", nameof(network));
                 return false;
             }
 
-            var subnetMask = networkIp.AddressFamily == AddressFamily.InterNetworkV6 ? IPAddressHelper.CreateSubnetMaskIPv6(cidr) : IPAddressHelper.CreateSubnetMaskIPv4(cidr);
+            var subnetMask = networkIp.AddressFamily == AddressFamily.InterNetworkV6
+                ? IPAddressHelper.CreateSubnetMaskIPv6(cidr)
+                : IPAddressHelper.CreateSubnetMaskIPv4(cidr);
+
             var fromIp = IPAddressHelper.GetNetworkAddress(networkIp, subnetMask);
             var toIp = IPAddressHelper.GetBroadcastAddress(networkIp, subnetMask);
             range = new IPRange(fromIp, toIp);
@@ -152,8 +163,6 @@ namespace DediLib.Net
             return range;
         }
 
-        private static readonly IPAddressComparer IpAddressComparer = new IPAddressComparer();
-
         /// <summary>
         /// Checks if current IP range overlaps with other IP range
         /// </summary>
@@ -163,7 +172,7 @@ namespace DediLib.Net
         {
             if (otherRange == null) throw new ArgumentNullException(nameof(otherRange));
 
-            if (IpAddressComparer.Compare(From, otherRange.From) >= 0 && 
+            if (IpAddressComparer.Compare(From, otherRange.From) >= 0 &&
                 IpAddressComparer.Compare(From, otherRange.To) <= 0)
                 return true;
 
@@ -188,17 +197,15 @@ namespace DediLib.Net
         public override bool Equals(object obj)
         {
             var range = obj as IPRange;
-            if (range == null) return false;
-
-            return Equals(obj);
+            return range != null && Equals(range);
         }
 
         public override int GetHashCode()
         {
             unchecked
             {
-                return 
-                    ((From?.GetHashCode() ?? 0) * 397) ^ 
+                return
+                    ((From?.GetHashCode() ?? 0) * 397) ^
                     (To?.GetHashCode() ?? 0);
             }
         }
