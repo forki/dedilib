@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -36,16 +37,17 @@ namespace DediLib
 
     public class InjectionContext : IInjectionContext
     {
-        private readonly Dictionary<Type, Func<IInjectionContext, object>> _actions;
+        private readonly ConcurrentDictionary<Type, Func<IInjectionContext, object>> _actions;
 
         public InjectionContext()
         {
-            _actions = new Dictionary<Type, Func<IInjectionContext, object>>();
+            _actions = new ConcurrentDictionary<Type, Func<IInjectionContext, object>>();
         }
 
         public InjectionContext(InjectionContext parentContext)
         {
-            _actions = parentContext?._actions.ToDictionary(x => x.Key, x => x.Value) ?? new Dictionary<Type, Func<IInjectionContext, object>>();
+            var clone = parentContext?._actions.ToDictionary(x => x.Key, x => x.Value);
+            _actions = clone != null ? new ConcurrentDictionary<Type, Func<IInjectionContext, object>>(clone) : new ConcurrentDictionary<Type, Func<IInjectionContext, object>>();
         }
 
         public void Dispose()
@@ -145,7 +147,7 @@ namespace DediLib
             return func(this);
         }
 
-        private readonly Dictionary<Type, Tuple<ConstructorInfo, ParameterInfo[]>[]> _cachedConstructors = new Dictionary<Type, Tuple<ConstructorInfo, ParameterInfo[]>[]>();
+        private readonly ConcurrentDictionary<Type, Tuple<ConstructorInfo, ParameterInfo[]>[]> _cachedConstructors = new ConcurrentDictionary<Type, Tuple<ConstructorInfo, ParameterInfo[]>[]>();
         private object TryCreateFromConstructor(Type type)
         {
             Tuple<ConstructorInfo, ParameterInfo[]>[] constructors;
