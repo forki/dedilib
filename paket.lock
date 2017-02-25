@@ -1,7 +1,8 @@
+FRAMEWORK: NET452
 NUGET
-  remote: http://api.nuget.org/v3/index.json
-    FAKE (4.28)
-    NLog (4.3.5)
+  remote: https://api.nuget.org/v3/index.json
+    FAKE (4.50.1)
+    NLog (4.4.3)
     NSubstitute (1.10)
     NUnit (2.6.4)
     NUnit.Runners (2.6.4)

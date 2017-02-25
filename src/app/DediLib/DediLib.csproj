@@ -97,11 +97,14 @@
     <Compile Include="Net\IPAddressHelper.cs" />
     <Compile Include="Net\IPRange.cs" />
     <Compile Include="Net\IPRangeDictionary.cs" />
+    <Compile Include="Net\ReducedIpAddress.cs" />
     <Compile Include="PlatformHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyCopier.cs" />
+    <Compile Include="RateLimiter.cs" />
     <Compile Include="RemainingTimer.cs" />
     <Compile Include="RoundRobin.cs" />
+    <Compile Include="Crypto\SHA1Pool.cs" />
     <Compile Include="Singleton.cs" />
     <Compile Include="IO\IKnowTotalBytesWritten.cs" />
     <Compile Include="IO\StreamSplitter.cs" />

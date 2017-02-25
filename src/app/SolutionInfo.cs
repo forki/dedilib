@@ -2,7 +2,7 @@ using System.Reflection;
 
 [assembly: AssemblyCompany("dedimax solutions UG")]
 [assembly: AssemblyProduct("DediLib")]
-[assembly: AssemblyCopyright("Copyright © 2015-2016 dedimax solutions UG")]
+[assembly: AssemblyCopyright("Copyright © 2015-2017 dedimax solutions UG")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -16,5 +16,5 @@ using System.Reflection;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.10.0.0")]
-[assembly: AssemblyFileVersion("0.10.0.0")]
+[assembly: AssemblyVersion("0.11.0.0")]
+[assembly: AssemblyFileVersion("0.11.0.0")]
