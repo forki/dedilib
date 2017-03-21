@@ -14,7 +14,7 @@ namespace DediLib.Logging
 
         public static ILogger GetLogger()
         {
-            return _mapping(GetCurrentClass());
+            return GetCurrentClassLogger();
         }
             
         public static ILogger GetLogger(Type type)
@@ -24,17 +24,8 @@ namespace DediLib.Logging
 
         public static ILogger GetCurrentClassLogger()
         {
-            return GetLogger(GetCurrentClass());
-        }
-
-        /// <summary>
-        /// Gets the fully qualified name of the class invoking the LogManager, including the 
-        /// namespace but not the assembly.    
-        /// </summary>
-        private static Type GetCurrentClass()
-        {
             Type declaringType;
-            var framesToSkip = 2;
+            var framesToSkip = 1;
 
             do
             {
@@ -45,7 +36,7 @@ namespace DediLib.Logging
                 framesToSkip++;
             } while (declaringType != null && declaringType.Module.Name.Equals("mscorlib.dll", StringComparison.OrdinalIgnoreCase));
 
-            return declaringType;
+            return GetLogger(declaringType);
         }
     }
 }

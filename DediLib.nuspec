@@ -16,10 +16,10 @@
     <dependencies>
     </dependencies>
 	<frameworkAssemblies>
-      <frameworkAssembly assemblyName="System.Net" targetFramework="net40" />
+      <frameworkAssembly assemblyName="System.Net" targetFramework="net45" />
     </frameworkAssemblies>
   </metadata>
   <files>
-    <file src="build\*.dll" target="lib/net40" />
+    <file src="build\*.dll" target="lib/net45" />
   </files>  
 </package>

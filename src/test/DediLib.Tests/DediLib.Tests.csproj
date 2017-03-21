@@ -63,6 +63,7 @@
     <Compile Include="Collections\HashSetDictionary_When_addMany.cs" />
     <Compile Include="Collections\HashSetDictionary_When_add.cs" />
     <Compile Include="Collections\HashSetStringExtensions_When_containsSuffixFor.cs" />
+    <Compile Include="Collections\TestBucketQueue.cs" />
     <Compile Include="Collections\TestNoDuplicateList.cs" />
     <Compile Include="Collections\TestTimedDictionary.cs" />
     <Compile Include="Collections\TestTimeSeriesLookupList.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Net\TestReducedIpAddress.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IO\TestStreamSplitter.cs" />
+    <Compile Include="TestRandomNumber.cs" />
     <Compile Include="TestClientPool.cs" />
     <Compile Include="TestCounterSignal.cs" />
     <Compile Include="TestInjectionContext.cs" />
