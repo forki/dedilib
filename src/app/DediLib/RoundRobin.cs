@@ -39,14 +39,16 @@ namespace DediLib
 
         private readonly object _cycleLock = new object();
         [TargetedPatchingOptOut("")]
-        public void Cycle()
+        public T Cycle()
         {
             lock (_cycleLock)
             {
                 var currentRound = _currentRound;
                 var nextRound = (currentRound + 1) % _rounds;
-                _onSelected(_items[nextRound]);
+                var newCurrent = _items[nextRound];
+                _onSelected(newCurrent);
                 _currentRound = nextRound;
+                return newCurrent;
             }
         }
 

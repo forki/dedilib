@@ -13,8 +13,7 @@ namespace DediLib.Logging
 
         public LoggingTextWriter(ILogger logger, LogLevel logLevel = LogLevel.Debug)
         {
-            if (logger == null) throw new ArgumentNullException(nameof(logger));
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
             _logLevel = logLevel;
         }
@@ -131,6 +130,9 @@ namespace DediLib.Logging
 
             switch (_logLevel)
             {
+                case LogLevel.Trace:
+                    _logger.Trace(logText);
+                    break;
                 case LogLevel.Debug:
                     _logger.Debug(logText);
                     break;
@@ -143,8 +145,11 @@ namespace DediLib.Logging
                 case LogLevel.Error:
                     _logger.Error(logText);
                     break;
+                case LogLevel.Fatal:
+                    _logger.Fatal(logText);
+                    break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException(nameof(_logLevel), _logLevel, "Invalid LogLevel");
             }
         }
 
@@ -216,25 +221,25 @@ namespace DediLib.Logging
 
         public override void WriteLine(string format, object arg0)
         {
-            _line.Append(String.Format(format, arg0));
+            _line.Append(string.Format(format, arg0));
             WriteLine();
         }
 
         public override void WriteLine(string format, object arg0, object arg1)
         {
-            _line.Append(String.Format(format, arg0, arg1));
+            _line.Append(string.Format(format, arg0, arg1));
             WriteLine();
         }
 
         public override void WriteLine(string format, object arg0, object arg1, object arg2)
         {
-            _line.Append(String.Format(format, arg0, arg1, arg2));
+            _line.Append(string.Format(format, arg0, arg1, arg2));
             WriteLine();
         }
 
         public override void WriteLine(string format, params object[] arg)
         {
-            _line.Append(String.Format(format, arg));
+            _line.Append(string.Format(format, arg));
             WriteLine();
         }
 
@@ -258,20 +263,18 @@ namespace DediLib.Logging
 
         public override async Task WriteLineAsync(char value)
         {
-            await WriteAsync(value).ConfigureAwait(false);
-            WriteLine();
+            await WriteAsync(value + Environment.NewLine).ConfigureAwait(false);
         }
 
         public override async Task WriteLineAsync(char[] buffer, int index, int count)
         {
             await WriteAsync(buffer, index, count).ConfigureAwait(false);
-            WriteLine();
+            await WriteLineAsync().ConfigureAwait(false);
         }
 
         public override async Task WriteLineAsync(string value)
         {
-            await WriteAsync(value).ConfigureAwait(false);
-            WriteLine();
+            await WriteAsync(value + Environment.NewLine).ConfigureAwait(false);
         }
 
         public override Encoding Encoding => Encoding.UTF8;

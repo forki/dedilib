@@ -55,6 +55,12 @@ namespace DediLib.Logging
             return _assembly;
         }
 
+        private Action<object, string> _trace;
+        public Action<object, string> GetTraceMethod()
+        {
+            return _trace = _trace ?? GetValueMethod("Trace");
+        }
+
         private Action<object, string> _debug;
         public Action<object, string> GetDebugMethod()
         {
@@ -88,7 +94,8 @@ namespace DediLib.Logging
             var methodInfo =
                 GetLoggerType()
                     .GetMethods(BindingFlags.Instance | BindingFlags.Public)
-                    .FirstOrDefault(x => x.IsGenericMethod && x.Name == "Error" && x.GetParameters().Length == 3
+                    .Where(x => x.Name == "Error")
+                    .FirstOrDefault(x => x.GetParameters().Length == 3
                                          && x.GetParameters()[0].ParameterType == typeof(Exception)
                                          && x.GetParameters()[1].ParameterType == typeof(string));
 
@@ -99,11 +106,36 @@ namespace DediLib.Logging
             return _errorWithException;
         }
 
+        private Action<object, string> _fatal;
+        public Action<object, string> GetFatalMethod()
+        {
+            return _fatal = _fatal ?? GetValueMethod("Fatal");
+        }
+
+        private Action<object, Exception, string> _fatalWithException;
+        public Action<object, Exception, string> GetFatalWithExceptionMethod()
+        {
+            if (_fatalWithException != null)
+                return _fatalWithException;
+
+            var methodInfo =
+                GetLoggerType()
+                    .GetMethods(BindingFlags.Instance | BindingFlags.Public)
+                    .Where(x => x.Name == "Fatal")
+                    .FirstOrDefault(x => x.GetParameters().Length == 3
+                                         && x.GetParameters()[0].ParameterType == typeof(Exception)
+                                         && x.GetParameters()[1].ParameterType == typeof(string));
+
+            if (methodInfo == null)
+                throw new InvalidOperationException("Could not find method: Fatal(Exception)");
+
+            _fatalWithException = (instance, exception, message) => methodInfo.Invoke(instance, new[] { exception, message, (object)null });
+            return _fatalWithException;
+        }
         private Assembly TryGetNLogAssembly()
         {
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            var assembly = assemblies.FirstOrDefault(a => !a.IsDynamic &&
-                                                          a.FullName.Contains("NLog"));
+            var assembly = assemblies.FirstOrDefault(a => !a.IsDynamic && a.FullName.StartsWith("NLog, "));
             return assembly;
         }
     }

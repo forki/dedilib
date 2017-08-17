@@ -36,9 +36,14 @@ namespace DediLib.Logging
         public MultipleLogger(string name, ITimeSource timeSource, ILogger logger, params ILogger[] loggers)
             : this(logger, loggers)
         {
-            if (timeSource == null) throw new ArgumentNullException(nameof(timeSource));
             Name = name;
-            TimeSource = timeSource;
+            TimeSource = timeSource ?? throw new ArgumentNullException(nameof(timeSource));
+        }
+
+        public void Trace(string logText, params object[] formatValues)
+        {
+            foreach (var logger in _loggers)
+                logger.Trace(logText, formatValues);
         }
 
         public void Debug(string logText, params object[] formatValues)
@@ -75,6 +80,24 @@ namespace DediLib.Logging
         {
             foreach (var logger in _loggers)
                 logger.Error(logText, formatValues);
+        }
+
+        public void Fatal(Exception exception)
+        {
+            foreach (var logger in _loggers)
+                logger.Fatal(exception);
+        }
+
+        public void Fatal(Exception exception, string logText)
+        {
+            foreach (var logger in _loggers)
+                logger.Fatal(exception, logText);
+        }
+
+        public void Fatal(string logText, params object[] formatValues)
+        {
+            foreach (var logger in _loggers)
+                logger.Fatal(logText, formatValues);
         }
     }
 }

@@ -17,6 +17,10 @@ namespace DediLib.Logging
             Name = name;
         }
 
+        public void Trace(string logText, params object[] formatValues)
+        {
+        }
+
         public void Debug(string logText, params object[] formatValues)
         {
         }
@@ -38,6 +42,18 @@ namespace DediLib.Logging
         }
 
         public void Error(string logText, params object[] formatValues)
+        {
+        }
+
+        public void Fatal(Exception exception)
+        {
+        }
+
+        public void Fatal(Exception exception, string logText)
+        {
+        }
+
+        public void Fatal(string logText, params object[] formatValues)
         {
         }
     }
