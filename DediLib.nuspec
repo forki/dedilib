@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>DediLib2</id>
-    <version>$version$</version>
+    <version>0.13.0</version>
     <authors>Hans Wolff</authors>
     <owners>Hans Wolff</owners>
     <licenseUrl>https://raw.githubusercontent.com/hanswolff/dedilib/master/LICENSE</licenseUrl>
