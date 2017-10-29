@@ -8,7 +8,7 @@ namespace DediLib.Logging
         private static Func<Type, ILogger> _mapping = type => new NullLogger(type.FullName);
         public static Func<Type, ILogger> Mapping
         {
-            get { return _mapping; }
+            get => _mapping;
             set { _mapping = value ?? (type => new NullLogger(type.FullName)); }
         }
 

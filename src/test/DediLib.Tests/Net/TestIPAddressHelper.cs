@@ -42,6 +42,7 @@ namespace DediLib.Tests.Net
         [TestCase(1, "128.0.0.0")]
         [TestCase(24, "255.255.255.0")]
         [TestCase(25, "255.255.255.128")]
+        [TestCase(31, "255.255.255.254")]
         [TestCase(32, "255.255.255.255")]
         public void CreateSubnetMaskIPv4(int cidr, string subnetMask)
         {

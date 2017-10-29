@@ -11,7 +11,7 @@ namespace DediLib.Logging
 
         public ITimeSource TimeSource
         {
-            get { return _loggers[0].TimeSource; }
+            get => _loggers[0].TimeSource;
             set
             {
                 if (value == null) value = new DefaultTimeSource();

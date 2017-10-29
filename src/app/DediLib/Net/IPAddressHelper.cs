@@ -52,10 +52,12 @@ namespace DediLib.Net
             return network1.Equals(network2);
         }
 
+        private static readonly IPAddress Mask255 = IPAddress.Parse("255.255.255.255");
         public static IPAddress CreateSubnetMaskIPv4(byte cidr)
         {
             const byte maskLength = 32;
             if (cidr > maskLength) throw new ArgumentOutOfRangeException(nameof(cidr), cidr, "CIDR network prefix cannot be larger than 32 for IPv4");
+            if (cidr == maskLength) return Mask255;
 
             var zeroBits = maskLength - cidr;
             var result = uint.MaxValue;

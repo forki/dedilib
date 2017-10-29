@@ -18,7 +18,7 @@ namespace DediLib.Logging
 
             methodInfo = methodInfo.MakeGenericMethod(typeof(string));
 
-            return (instance, logText) => methodInfo.Invoke(instance, new[] { logText });
+            return (instance, logText) => methodInfo.Invoke(instance, new object[] { logText });
         }
 
         public Func<string, object> GetCreateLoggerMethod()
@@ -32,7 +32,7 @@ namespace DediLib.Logging
             if (methodInfo == null)
                 throw new InvalidOperationException("Could not find 'GetLogger' method");
 
-            return name => methodInfo.Invoke(null, new[] { name ?? "" });
+            return name => methodInfo.Invoke(null, new object[] { name ?? "" });
         }
 
         private Type _logger;

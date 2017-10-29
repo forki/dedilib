@@ -72,7 +72,9 @@ namespace DediLib.Logging
 
         public void Error(Exception exception)
         {
-            NLogBinding.GetErrorWithExceptionMethod().Invoke(_logger, exception, null);
+            if (exception == null) return;
+
+            NLogBinding.GetErrorWithExceptionMethod().Invoke(_logger, exception, exception.ToString());
         }
 
         public void Error(Exception exception, string logText)
@@ -87,7 +89,9 @@ namespace DediLib.Logging
 
         public void Fatal(Exception exception)
         {
-            NLogBinding.GetFatalWithExceptionMethod().Invoke(_logger, exception, null);
+            if (exception == null) return;
+
+            NLogBinding.GetFatalWithExceptionMethod().Invoke(_logger, exception, exception.ToString());
         }
 
         public void Fatal(Exception exception, string logText)

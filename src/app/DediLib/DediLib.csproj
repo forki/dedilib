@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DediLib</RootNamespace>
     <AssemblyName>DediLib</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -52,11 +52,13 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="AsyncHelper.cs" />
     <Compile Include="ClientPool.cs" />
     <Compile Include="Collections\BucketQueue.cs" />
     <Compile Include="Collections\CascadedDictionary.cs" />
     <Compile Include="Collections\CollectionWrapper.cs" />
     <Compile Include="Collections\DictionaryExtensions.cs" />
+    <Compile Include="Collections\DistinctConcurrentQueue.cs" />
     <Compile Include="Collections\EnumerableExtensions.cs" />
     <Compile Include="Collections\HashSetExtensions.cs" />
     <Compile Include="Collections\ListDictionary.cs" />
@@ -75,6 +77,7 @@
     <Compile Include="CounterSignal.cs" />
     <Compile Include="Data\QueryResultCompiler.cs" />
     <Compile Include="Data\SqlBuilder.cs" />
+    <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="DefaultTimeSource.cs" />
     <Compile Include="IO\ExecutableRunner.cs" />
     <Compile Include="IO\FileNameCleaner.cs" />
@@ -84,6 +87,7 @@
     <Compile Include="InterlockedBoolean.cs" />
     <Compile Include="IO\StreamTransferrer.cs" />
     <Compile Include="ITimeSource.cs" />
+    <Compile Include="LinqExtensions.cs" />
     <Compile Include="Logging\ConsoleLogger.cs" />
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Logging\Logger.cs" />

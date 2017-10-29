@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DediLib.Tests</RootNamespace>
     <AssemblyName>DediLib.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -64,6 +64,7 @@
     <Compile Include="Collections\HashSetDictionary_When_add.cs" />
     <Compile Include="Collections\HashSetStringExtensions_When_containsSuffixFor.cs" />
     <Compile Include="Collections\TestBucketQueue.cs" />
+    <Compile Include="Collections\TestDistinctConcurrentQueue.cs" />
     <Compile Include="Collections\TestNoDuplicateList.cs" />
     <Compile Include="Collections\TestTimedDictionary.cs" />
     <Compile Include="Collections\TestTimeSeriesLookupList.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="IO\TestExecutableRunner.cs" />
     <Compile Include="IO\TestFileNameCleaner.cs" />
     <Compile Include="IO\TestStreamTransferrer.cs" />
+    <Compile Include="LinqExtensionsTest.cs" />
     <Compile Include="Logging\TestLogger.cs" />
     <Compile Include="Logging\TestNLogLogger.cs" />
     <Compile Include="Net\TestIPAddressComparer.cs" />
@@ -106,7 +108,21 @@
     <None Include="paket.references" />
   </ItemGroup>
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.5.2'">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.7'">
+      <ItemGroup>
+        <Reference Include="System.Configuration">
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="Castle.Core">
+          <HintPath>..\..\..\packages\Castle.Core\lib\net45\Castle.Core.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.7'">
       <ItemGroup>
         <Reference Include="NLog">
           <HintPath>..\..\..\packages\NLog\lib\net45\NLog.dll</HintPath>
@@ -117,10 +133,10 @@
     </When>
   </Choose>
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.5.2'">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.7'">
       <ItemGroup>
         <Reference Include="NSubstitute">
-          <HintPath>..\..\..\packages\NSubstitute\lib\net45\NSubstitute.dll</HintPath>
+          <HintPath>..\..\..\packages\NSubstitute\lib\net46\NSubstitute.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -128,10 +144,38 @@
     </When>
   </Choose>
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.5.2'">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.7'">
       <ItemGroup>
         <Reference Include="nunit.framework">
-          <HintPath>..\..\..\packages\NUnit\lib\nunit.framework.dll</HintPath>
+          <HintPath>..\..\..\packages\NUnit\lib\net45\nunit.framework.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.7'">
+      <ItemGroup>
+        <Reference Include="System.ComponentModel.Composition">
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="mscorlib">
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="System.Runtime">
+          <HintPath>..\..\..\packages\System.Runtime\lib\net462\System.Runtime.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.7'">
+      <ItemGroup>
+        <Reference Include="System.Threading.Tasks.Extensions">
+          <HintPath>..\..\..\packages\System.Threading.Tasks.Extensions\lib\netstandard1.0\System.Threading.Tasks.Extensions.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>

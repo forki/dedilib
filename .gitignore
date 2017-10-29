@@ -22,6 +22,7 @@ packages/
 .fake/
 .nuget/
 .paket/
+paket-files/
 .vs/
 *.nupkg
 

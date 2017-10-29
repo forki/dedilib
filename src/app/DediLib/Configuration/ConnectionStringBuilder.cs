@@ -106,8 +106,7 @@ namespace DediLib.Configuration
 
         public object Get(string name)
         {
-            object value;
-            if (_values.TryGetValue(name, out value))
+            if (_values.TryGetValue(name, out var value))
                 return value;
             return null;
         }
